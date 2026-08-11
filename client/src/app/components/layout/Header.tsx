@@ -10,11 +10,15 @@ import { useLocale } from "@/context/LocaleContext";
 import { getStrapiMedia } from "@/lib/utils";
 import Image from "next/image";
 import { HeaderData } from "@/types";
+import styles from "./Header.module.css";
+import { MdOutlineMenu } from "react-icons/md";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { CiGlobe } from "react-icons/ci";
 
 export default function Header() {
    const [showLangModal, setShowLangModal] = useState(false);
-   const [isLoggedIn, setIsLoggedIn] = useState(true); // Toggle based on your Auth state
-   const { locale, setLocale } = useLocale();
+   const [isLoggedIn, setIsLoggedIn] = useState(false); // Toggle based on your Auth state
+   const { locale } = useLocale();
    const [headerData, setHeaderData] = useState<HeaderData | null>(null);
 
    const query = qs.stringify(
@@ -43,12 +47,9 @@ export default function Header() {
    }, [query]);
 
    return (
-      <>
-         <Navbar
-            expand="md"
-            className="bg-dark navbar-dark border-bottom border-secondary py-2"
-         >
-            <Container fluid className="px-4">
+      <section className={styles.container}>
+         <Navbar expand="md" className="py-2">
+            <Container>
                {/* Logo */}
                <Navbar.Brand href="/" className="fw-bold fs-3 text-white">
                   {headerData?.logo?.url && (
@@ -67,34 +68,16 @@ export default function Header() {
 
                {/* Centered Nav Links */}
                <Nav className="mx-auto d-none d-md-flex gap-4">
-                  <Nav.Link
-                     as={Link}
-                     href="/destinations"
-                     className="text-white fw-medium"
-                  >
-                     Destinations
-                  </Nav.Link>
-                  <Nav.Link
-                     as={Link}
-                     href="/experiences"
-                     className="text-white fw-medium"
-                  >
-                     Experiences
-                  </Nav.Link>
-                  <Nav.Link
-                     as={Link}
-                     href="/help"
-                     className="text-white fw-medium"
-                  >
-                     Help
-                  </Nav.Link>
-                  <Nav.Link
-                     as={Link}
-                     href="/host"
-                     className="text-white fw-medium"
-                  >
-                     Host
-                  </Nav.Link>
+                  {headerData?.headerLinks?.map((link) => (
+                     <Nav.Link
+                        key={link?.id}
+                        as={Link}
+                        href={link?.url}
+                        className="text-white fw-normal"
+                     >
+                        {link?.label}
+                     </Nav.Link>
+                  ))}
                </Nav>
 
                {/* Right Action Icons */}
@@ -102,11 +85,11 @@ export default function Header() {
                   {/* Globe Icon Trigger for Language Modal */}
                   <Button
                      variant="link"
-                     className="text-white p-2 border-0 rounded-circle"
+                     className="text-white border-0 rounded-circle"
                      onClick={() => setShowLangModal(true)}
                      aria-label="Language and Currency Settings"
                   >
-                     <i className="bi bi-globe fs-5"></i>
+                     <CiGlobe color="#fff" size={20} />
                   </Button>
 
                   {/* Account Options Dropdown (Pill Button) */}
@@ -114,10 +97,10 @@ export default function Header() {
                      <Dropdown.Toggle
                         variant="outline-light"
                         id="user-menu-dropdown"
-                        className="rounded-pill px-3 py-1 d-flex align-items-center gap-2 border-secondary bg-transparent"
+                        className="d-flex align-items-center gap-1 border-secondary bg-transparent"
                      >
-                        <i className="bi bi-person-circle fs-5"></i>
-                        <i className="bi bi-list fs-5"></i>
+                        <FaRegCircleUser color="#fff" size={20} />
+                        <MdOutlineMenu color="#fff" size={20} />
                      </Dropdown.Toggle>
 
                      <Dropdown.Menu
@@ -246,6 +229,6 @@ export default function Header() {
             show={showLangModal}
             onHide={() => setShowLangModal(false)}
          />
-      </>
+      </section>
    );
 }

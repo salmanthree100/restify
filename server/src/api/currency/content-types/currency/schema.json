@@ -50,6 +50,15 @@
         }
       },
       "default": 1
+    },
+    "currencyCode": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": "USD"
     }
   }
 }

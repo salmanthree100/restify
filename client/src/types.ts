@@ -16,3 +16,18 @@ export interface HeaderData {
    logo?: StrapiMedia;
    headerLinks?: HeaderLink[];
 }
+
+export interface StrapiCurrency {
+   name: string;
+   code?: string;
+   symbol: string;
+   exchangeRateToUSD?: number;
+   currencyCode: string;
+}
+
+export interface LanguageItem {
+   code: string;
+   name: string;
+   region: string;
+   flag: string;
+}

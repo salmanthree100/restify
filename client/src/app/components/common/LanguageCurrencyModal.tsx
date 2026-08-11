@@ -1,7 +1,6 @@
-// src/components/modals/LanguageCurrencyModal.tsx
 "use client";
 
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import {
    Modal,
    Nav,
@@ -13,8 +12,9 @@ import {
    Button,
 } from "react-bootstrap";
 import { useCurrency } from "@/context/CurrencyContext";
+import { StrapiCurrency, LanguageItem } from "@/types";
 
-const LANGUAGES = [
+const LANGUAGES: LanguageItem[] = [
    { code: "en-US", name: "English", region: "United States", flag: "🇺🇸" },
    { code: "en-GB", name: "English", region: "United Kingdom", flag: "🇬🇧" },
    { code: "fr-FR", name: "French", region: "France", flag: "🇫🇷" },
@@ -25,19 +25,10 @@ const LANGUAGES = [
    { code: "ko-KR", name: "Korean", region: "South Korea", flag: "🇰🇷" },
 ];
 
-const CURRENCIES = [
-   { code: "USD", name: "English", subText: "United States", symbol: "$" },
-   { code: "EUR", name: "Euro", subText: "EUR - €", symbol: "€" },
-   { code: "GBP", name: "British Pound", subText: "GBP - £", symbol: "£" },
-   { code: "JPY", name: "Japanese Yen", subText: "JPY - ¥", symbol: "¥" },
-   { code: "AUD", name: "Australian Dollar", subText: "AUD - $", symbol: "$" },
-   { code: "CAD", name: "Canadian Dollar", subText: "CAD - $", symbol: "$" },
-   {
-      code: "AED",
-      name: "UA Emirates Dirham",
-      subText: "AED - د.إ",
-      symbol: "AED",
-   },
+const DEFAULT_CURRENCIES: StrapiCurrency[] = [
+   { name: "USD", symbol: "$", currencyCode: "USD" },
+   { name: "Euro", symbol: "€", currencyCode: "EUR" },
+   { name: "British Pound", symbol: "£", currencyCode: "GBP" },
 ];
 
 interface ModalProps {
@@ -54,17 +45,43 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
 
    const { currency, setCurrency, language, setLanguage } = useCurrency();
 
+   // 1. Properly type state as an array: StrapiCurrency[]
+   const [strapiCurrencies, setStrapiCurrencies] = useState<StrapiCurrency[]>(
+      [],
+   );
+
+   // 2. Safely filter languages
    const filteredLanguages = LANGUAGES.filter(
       (l) =>
          l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
          l.region.toLowerCase().includes(searchQuery.toLowerCase()),
    );
 
-   const filteredCurrencies = CURRENCIES.filter(
+   // 3. Use Strapi currencies if loaded, otherwise fallback to defaults
+   const currencyList =
+      strapiCurrencies.length > 0 ? strapiCurrencies : DEFAULT_CURRENCIES;
+
+   const filteredCurrencies = currencyList.filter(
       (c) =>
          c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-         c.code.toLowerCase().includes(searchQuery.toLowerCase()),
+         c.currencyCode.toLowerCase().includes(searchQuery.toLowerCase()),
    );
+
+   useEffect(() => {
+      const fetchCurrencies = async () => {
+         try {
+            const response = await fetch("/api/strapi/currencies");
+            const data = await response.json();
+            // Strapi v4/v5 format check
+            if (Array.isArray(data?.data)) {
+               setStrapiCurrencies(data.data);
+            }
+         } catch (error) {
+            console.error("Failed to fetch currencies:", error);
+         }
+      };
+      fetchCurrencies();
+   }, []);
 
    return (
       <Modal
@@ -87,7 +104,9 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                <Nav
                   variant="underline"
                   activeKey={activeTab}
-                  onSelect={(k) => setActiveTab(k as never)}
+                  onSelect={(k) =>
+                     setActiveTab((k as "language" | "currency") || "language")
+                  }
                >
                   <Nav.Item>
                      <Nav.Link
@@ -132,10 +151,10 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
             <Container fluid className="px-0">
                <Row className="g-3">
                   {activeTab === "language"
-                     ? filteredLanguages.map((item) => {
+                     ? filteredLanguages.map((item: LanguageItem) => {
                           const isSelected = language === item.code;
                           return (
-                             <Col xs={6} sm={4} md={3} lg={2.4} key={item.code}>
+                             <Col xs={6} sm={4} md={3} lg={2} key={item.code}>
                                 <Button
                                    variant="light"
                                    onClick={() => setLanguage(item.code)}
@@ -155,29 +174,40 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                              </Col>
                           );
                        })
-                     : filteredCurrencies.map((item) => {
-                          const isSelected = currency === item.code;
-                          return (
-                             <Col xs={6} sm={4} md={3} lg={2.4} key={item.code}>
-                                <Button
-                                   variant="light"
-                                   onClick={() => setCurrency(item.code)}
-                                   className={`w-100 text-start p-3 rounded-3 border-0 ${
-                                      isSelected
-                                         ? "bg-light border border-dark border-2"
-                                         : "bg-transparent"
-                                   }`}
+                     : filteredCurrencies.map(
+                          (item: StrapiCurrency, index: number) => {
+                             const isSelected = currency === item.currencyCode;
+                             return (
+                                // Unique key combination using currencyCode + index
+                                <Col
+                                   xs={6}
+                                   sm={4}
+                                   md={3}
+                                   lg={2}
+                                   key={`${item.currencyCode}-${index}`}
                                 >
-                                   <div className="fw-semibold text-dark small">
-                                      {item.name}
-                                   </div>
-                                   <div className="text-muted extra-small">
-                                      {item.subText}
-                                   </div>
-                                </Button>
-                             </Col>
-                          );
-                       })}
+                                   <Button
+                                      variant="light"
+                                      onClick={() =>
+                                         setCurrency(item.currencyCode)
+                                      }
+                                      className={`w-100 text-start p-3 rounded-3 border-0 ${
+                                         isSelected
+                                            ? "bg-light border border-dark border-2"
+                                            : "bg-transparent"
+                                      }`}
+                                   >
+                                      <div className="fw-semibold text-dark small">
+                                         {item.name}
+                                      </div>
+                                      <div className="text-muted extra-small">
+                                         {item.currencyCode} - {item.symbol}
+                                      </div>
+                                   </Button>
+                                </Col>
+                             );
+                          },
+                       )}
                </Row>
             </Container>
          </Modal.Body>
