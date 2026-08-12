@@ -31,3 +31,22 @@ export interface LanguageItem {
    region: string;
    flag: string;
 }
+
+export interface StatItem {
+   id: number;
+   value: string;
+   label: string;
+}
+
+export interface HeroSectionData {
+   backgroundImage?: StrapiMedia;
+   searchWithAiText?: string;
+   destinationPlaceholder?: string;
+   datePlaceholder?: string;
+   guestsPlaceholder?: string;
+   stats?: StatItem[];
+   destinationSearchText: string;
+   destinationLabel: string;
+   dateLabel: string;
+   guestsLabel: string;
+}

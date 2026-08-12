@@ -9,7 +9,7 @@ import qs from "qs";
 import { useLocale } from "@/context/LocaleContext";
 import { getStrapiMedia } from "@/lib/utils";
 import Image from "next/image";
-import { HeaderData } from "@/types";
+import { HeaderData } from "@/app/types";
 import styles from "./Header.module.css";
 import { MdOutlineMenu } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";

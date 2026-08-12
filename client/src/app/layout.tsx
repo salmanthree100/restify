@@ -4,6 +4,7 @@ import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { LocaleProvider } from "@/context/LocaleContext";
+import Header from "@/app/components/layout/Header";
 
 const inter = Inter({
    variable: "--font-inter",
@@ -18,11 +19,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
    return (
       <html lang="en" className={`${inter.variable}`}>
-         <CurrencyProvider>
-            <LocaleProvider>
-               <body>{children}</body>
-            </LocaleProvider>
-         </CurrencyProvider>
+         <body>
+            <CurrencyProvider>
+               <LocaleProvider>
+                  <Header />
+                  {children}
+               </LocaleProvider>
+            </CurrencyProvider>
+         </body>
       </html>
    );
 }

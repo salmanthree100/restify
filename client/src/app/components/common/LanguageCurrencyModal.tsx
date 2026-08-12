@@ -12,7 +12,8 @@ import {
    Button,
 } from "react-bootstrap";
 import { useCurrency } from "@/context/CurrencyContext";
-import { StrapiCurrency, LanguageItem } from "@/types";
+import { StrapiCurrency, LanguageItem } from "@/app/types";
+import { useLocale } from "@/context/LocaleContext";
 
 const LANGUAGES: LanguageItem[] = [
    { code: "en-US", name: "English", region: "United States", flag: "🇺🇸" },
@@ -43,7 +44,14 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
    const [searchQuery, setSearchQuery] = useState("");
    const [autoTranslate, setAutoTranslate] = useState(true);
 
-   const { currency, setCurrency, language, setLanguage } = useCurrency();
+   const { currency, setCurrency } = useCurrency();
+   const { locale, setLocale } = useLocale();
+
+   const handleLanguageSelect = (fullCode: string) => {
+      // Converts "en-US" -> "en", "fr-FR" -> "fr", "ja-JP" -> "ja"
+      const strapiLocale = fullCode.split("-")[0];
+      setLocale(strapiLocale);
+   };
 
    // 1. Properly type state as an array: StrapiCurrency[]
    const [strapiCurrencies, setStrapiCurrencies] = useState<StrapiCurrency[]>(
@@ -152,12 +160,15 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                <Row className="g-3">
                   {activeTab === "language"
                      ? filteredLanguages.map((item: LanguageItem) => {
-                          const isSelected = language === item.code;
+                          // Check active selection against current locale
+                          const isSelected = locale === item.code.split("-")[0];
                           return (
                              <Col xs={6} sm={4} md={3} lg={2} key={item.code}>
                                 <Button
                                    variant="light"
-                                   onClick={() => setLanguage(item.code)}
+                                   onClick={() =>
+                                      handleLanguageSelect(item.code)
+                                   } // <--- Calls our new function
                                    className={`w-100 text-start p-3 rounded-3 border-0 ${
                                       isSelected
                                          ? "bg-light border border-dark border-2"

@@ -1,0 +1,25 @@
+.container {
+    padding-top: 400px;
+}
+
+.herobg {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 700px;
+}
+
+.destinationLabel,
+.destinationLabel:hover {
+    color: var(--primary-text);
+}
+
+@media(max-width:600px) {
+    .container {
+        padding-top: 50px;
+    }
+
+    .herobg {
+        height: 400px;
+    }
+}

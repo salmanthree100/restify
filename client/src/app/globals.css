@@ -1,6 +1,7 @@
 :root {
   --background: #ffffff;
   --foreground: #202020;
+  --primary-text: #D02D11;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -45,6 +46,94 @@ a {
 #user-menu-dropdown::after {
   display: none !important;
 }
+
+/* date picker custom styles */
+/* --- Root Layout Wrapper Customization --- */
+.rdp {
+  --rdp-cell-size: 46px;
+  /* Increases spacing between days for scannability */
+  --rdp-accent-color: #222222;
+  /* Matches dark contrast accents */
+  margin: 0;
+}
+
+/* Remove default outside margins and center container alignment */
+.rdp-months {
+  justify-content: center;
+  gap: 3rem;
+  /* Perfectly separates the September and October grids */
+}
+
+/* --- Month Header Typography --- */
+.rdp-caption_label {
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  color: #222222 !important;
+  text-transform: capitalize;
+}
+
+/* Hide or reposition navigation arrows to match layout edges */
+.rdp-nav_button {
+  background: transparent !important;
+  border: none !important;
+  color: #222222 !important;
+}
+
+.rdp-nav_button:hover {
+  background-color: #f7f7f7 !important;
+  border-radius: 50%;
+}
+
+/* --- Weekdays Header Elements --- */
+.rdp-head_cell {
+  font-size: 0.88rem !important;
+  font-weight: 400 !important;
+  color: #222222 !important;
+  /* Forces solid dark text for Sun, Mon, etc. */
+  padding-bottom: 1rem !important;
+}
+
+/* --- Individual Day Component Cells --- */
+.rdp-day {
+  font-size: 0.92rem !important;
+  font-weight: 500 !important;
+  color: #222222 !important;
+  border-radius: 50% !important;
+  /* Keeps selection frames circular */
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+}
+
+/* Soft gray color style for past days (unselectable) */
+.rdp-day_disabled {
+  color: #b0b0b0 !important;
+  opacity: 0.6;
+  text-decoration: none !important;
+}
+
+/* Clean transparent hover effect on available dates */
+.rdp-day:hover:not(.rdp-day_disabled) {
+  background-color: #f7f7f7 !important;
+  border: 1px solid #222222 !important;
+}
+
+/* --- Range Highlight Mechanics --- */
+/* Shading block style spanning between selected start and end dates */
+.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) {
+  background-color: #f7f7f7 !important;
+  color: #222222 !important;
+  border-radius: 0px !important;
+  /* Extends span block continuously */
+}
+
+/* Distinctive solid black anchor for selected start & end days */
+.rdp-day_range_start,
+.rdp-day_range_end {
+  background-color: #222222 !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+}
+
 
 @media (prefers-color-scheme: dark) {
   html {

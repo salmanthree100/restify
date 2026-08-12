@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_blocks_hero_sections",
+  "info": {
+    "displayName": "HeroSection"
+  },
+  "options": {},
+  "attributes": {
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "destinationSearchText": {
+      "type": "string"
+    },
+    "destinationLabel": {
+      "type": "string"
+    },
+    "dateLabel": {
+      "type": "string"
+    },
+    "guestsLabel": {
+      "type": "string"
+    },
+    "searchWithAiText": {
+      "type": "string",
+      "default": "Search with AI"
+    },
+    "destinationPlaceholder": {
+      "type": "string",
+      "default": "Where are you going?"
+    },
+    "datePlaceholder": {
+      "type": "string",
+      "default": "Add date"
+    },
+    "guestsPlaceholder": {
+      "type": "string",
+      "default": "Add guests"
+    },
+    "stats": {
+      "type": "component",
+      "component": "elements.stat-item",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

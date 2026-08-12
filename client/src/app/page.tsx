@@ -1,9 +1,9 @@
-import Header from "@/app/components/layout/Header";
+import HeroSection from "@/app/components/pages/home/HeroSection";
 
 const page = () => {
    return (
       <div>
-         <Header />
+         <HeroSection />
       </div>
    );
 };
