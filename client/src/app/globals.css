@@ -134,6 +134,17 @@ a {
   border-radius: 50% !important;
 }
 
+.hover-bg-light:hover {
+  background-color: #f8f9fa !important;
+}
+
+.extra-small {
+  font-size: 0.75rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
 
 @media (prefers-color-scheme: dark) {
   html {

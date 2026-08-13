@@ -15,6 +15,17 @@ import { HiCalendarDateRange } from "react-icons/hi2";
 import DatePicker from "@/app/components/common/DatePicker";
 import { Overlay } from "react-bootstrap";
 import { DateRange } from "react-day-picker";
+import DestinationPopover from "@/app/components/common/DestinationPopover";
+
+interface SelectedDestinationData {
+   title: string;
+   description?: string;
+   subtitle?: string;
+   iconUrl?: string;
+   iconBgColor?: string;
+   lat?: number;
+   lng?: number;
+}
 
 const HeroSection = () => {
    const [heroData, setHeroData] = useState<HeroSectionData | null>(null);
@@ -23,6 +34,30 @@ const HeroSection = () => {
    // 1. Create a reference attached to the entire search bar container
    const searchBarRef = useRef<HTMLDivElement>(null);
    const [dates, setDates] = useState<DateRange | undefined>(undefined);
+   const [selectedDestination, setSelectedDestination] =
+      useState<SelectedDestinationData | null>(null);
+   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
+   const [destinationInput, setDestinationInput] = useState("");
+
+   const handleSelectDestination = (dest: SelectedDestinationData) => {
+      // 1. Fill input text with the selected title
+      setDestinationInput(dest.title);
+
+      // 2. Save full object data (coordinates, title, etc.)
+      setSelectedDestination(dest);
+
+      // 3. Close popover
+      setIsDestinationOpen(false);
+
+      // Optional: Save to recent search in localStorage
+      localStorage.setItem(
+         "recent_search",
+         JSON.stringify({
+            title: dest.title,
+            subtitle: dest.subtitle || "Recent search",
+         }),
+      );
+   };
 
    const query = qs.stringify(
       {
@@ -117,7 +152,10 @@ const HeroSection = () => {
                         } /* 2. Anchor target for the overlay */
                      >
                         {/* Destination Column */}
-                        <div className="flex-grow-1 px-4 border-end">
+                        <div
+                           className="flex-grow-1 px-4 border-end"
+                           onClick={() => setIsDestinationOpen(true)}
+                        >
                            <div className="extra-small fw-semibold text-muted">
                               <PiMapPinLight
                                  size={20}
@@ -128,8 +166,27 @@ const HeroSection = () => {
                            </div>
                            <input
                               type="text"
+                              value={destinationInput}
+                              onChange={(e) => {
+                                 setDestinationInput(e.target.value);
+
+                                 // Reset full selected object if user custom-edits the query
+                                 if (selectedDestination) {
+                                    setSelectedDestination(null);
+                                 }
+
+                                 setIsDestinationOpen(true);
+                              }}
+                              onFocus={() => setIsDestinationOpen(true)}
                               placeholder={heroData?.destinationPlaceholder}
                               className="form-control border-0 bg-transparent p-0 shadow-none text-dark fw-medium"
+                           />
+                           {/* Floating Destination Popover */}
+                           <DestinationPopover
+                              isOpen={isDestinationOpen}
+                              onClose={() => setIsDestinationOpen(false)}
+                              onSelectDestination={handleSelectDestination}
+                              searchQuery={destinationInput}
                            />
                         </div>
 
@@ -147,9 +204,6 @@ const HeroSection = () => {
                               />
                               {heroData?.dateLabel}
                            </div>
-                           <span className="text-secondary small">
-                              {heroData?.datePlaceholder}
-                           </span>
                            {/* Dynamically displays the selected date string format */}
                            <span
                               className={
