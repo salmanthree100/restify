@@ -44,6 +44,11 @@
       "type": "component",
       "component": "elements.stat-item",
       "repeatable": true
+    },
+    "guestMenu": {
+      "type": "component",
+      "component": "blocks.guest-category",
+      "repeatable": true
     }
   },
   "config": {}

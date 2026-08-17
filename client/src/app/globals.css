@@ -146,6 +146,16 @@ a {
   cursor: pointer;
 }
 
+.group:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+.group:hover img {
+  transform: scale(1.05);
+  transition: transform 0.4s ease;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

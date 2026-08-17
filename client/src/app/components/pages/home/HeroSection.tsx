@@ -16,6 +16,9 @@ import DatePicker from "@/app/components/common/DatePicker";
 import { Overlay } from "react-bootstrap";
 import { DateRange } from "react-day-picker";
 import DestinationPopover from "@/app/components/common/DestinationPopover";
+import GuestPopover, {
+   GuestCounts,
+} from "@/app/components/common/GuestPopover";
 
 interface SelectedDestinationData {
    title: string;
@@ -38,6 +41,13 @@ const HeroSection = () => {
       useState<SelectedDestinationData | null>(null);
    const [isDestinationOpen, setIsDestinationOpen] = useState(false);
    const [destinationInput, setDestinationInput] = useState("");
+   const [isGuestOpen, setIsGuestOpen] = useState(false);
+   const [guestCounts, setGuestCounts] = useState<GuestCounts>({
+      adults: 0,
+      children: 0,
+      infants: 0,
+      pets: 0,
+   });
 
    const handleSelectDestination = (dest: SelectedDestinationData) => {
       // 1. Fill input text with the selected title
@@ -106,6 +116,25 @@ const HeroSection = () => {
 
       const endStr = dates.to.toLocaleDateString("en-US", options);
       return `${startStr} - ${endStr}`; // Output example: "Aug 12 - Aug 19"
+   };
+
+   // Helper function to format input display string
+   const getGuestSummary = () => {
+      const totalGuests =
+         (guestCounts.adults || 0) + (guestCounts.children || 0);
+      const infants = guestCounts.infants || 0;
+      const pets = guestCounts.pets || 0;
+
+      if (totalGuests === 0) return heroData?.guestsPlaceholder;
+
+      const parts = [
+         `${totalGuests} ${totalGuests === 1 ? "guest" : "guests"}`,
+      ];
+      if (infants > 0)
+         parts.push(`${infants} ${infants === 1 ? "infant" : "infants"}`);
+      if (pets > 0) parts.push(`${pets} ${pets === 1 ? "pet" : "pets"}`);
+
+      return parts.join(", ");
    };
 
    return (
@@ -218,17 +247,33 @@ const HeroSection = () => {
 
                         {/* Guests Column */}
                         <div className="flex-grow-1 px-3">
-                           <div className="extra-small fw-semibold text-muted">
+                           <div className="fw-normal text-muted">
                               <FiUsers
                                  size={20}
                                  className="me-2"
                                  color="#0C0C0C"
                               />
                               {heroData?.guestsLabel}
+                              <div className="position-relative">
+                                 {/* Trigger Input Field */}
+                                 <div
+                                    onClick={() => setIsGuestOpen(!isGuestOpen)}
+                                    className="cursor-pointer"
+                                 >
+                                    <div className="text-secondary small">
+                                       {getGuestSummary()}
+                                    </div>
+                                 </div>
+
+                                 {/* Popover */}
+                                 <GuestPopover
+                                    isOpen={isGuestOpen}
+                                    onClose={() => setIsGuestOpen(false)}
+                                    guestCounts={guestCounts}
+                                    onChangeCounts={setGuestCounts}
+                                 />
+                              </div>
                            </div>
-                           <span className="text-secondary small">
-                              {heroData?.guestsPlaceholder}
-                           </span>
                         </div>
 
                         {/* 3. Render the overlay targeting the entire search bar width */}

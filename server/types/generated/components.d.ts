@@ -1,5 +1,20 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksGuestCategory extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_guest_categories';
+  info: {
+    displayName: 'Guest Category';
+  };
+  attributes: {
+    defaultValue: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    key: Schema.Attribute.String;
+    max: Schema.Attribute.Integer;
+    min: Schema.Attribute.Integer;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksHeroSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_hero_sections';
   info: {
@@ -14,6 +29,7 @@ export interface BlocksHeroSection extends Struct.ComponentSchema {
     destinationPlaceholder: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Where are you going?'>;
     destinationSearchText: Schema.Attribute.String;
+    guestMenu: Schema.Attribute.Component<'blocks.guest-category', true>;
     guestsLabel: Schema.Attribute.String;
     guestsPlaceholder: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Add guests'>;
@@ -59,6 +75,7 @@ export interface MenuNavLink extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
+      'blocks.guest-category': BlocksGuestCategory;
       'blocks.hero-section': BlocksHeroSection;
       'elements.stat-item': ElementsStatItem;
       'layout.header': LayoutHeader;

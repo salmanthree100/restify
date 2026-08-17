@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_blocks_guest_categories",
+  "info": {
+    "displayName": "Guest Category"
+  },
+  "options": {},
+  "attributes": {
+    "key": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "defaultValue": {
+      "type": "integer",
+      "default": 0
+    },
+    "min": {
+      "type": "integer"
+    },
+    "max": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

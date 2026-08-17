@@ -47,8 +47,8 @@ export default function Header() {
    }, [query]);
 
    return (
-      <section className={styles.container}>
-         <Navbar expand="md" className="py-2">
+      <section>
+         <Navbar expand="md" className={`${styles.container} py-2 fixed-top`}>
             <Container>
                {/* Logo */}
                <Navbar.Brand href="/" className="fw-bold fs-3 text-white">
