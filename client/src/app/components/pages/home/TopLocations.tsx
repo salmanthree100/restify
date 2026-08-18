@@ -25,6 +25,58 @@ interface StrapiLocationResponse {
    };
 }
 
+interface TranslationItem {
+   id: number;
+   locale: string;
+   topLocationsText: string;
+   propertiesText: string;
+}
+
+const translations: TranslationItem[] = [
+   {
+      id: 1,
+      locale: "en",
+      topLocationsText: "Top Locations",
+      propertiesText: "Properties",
+   },
+   {
+      id: 2,
+      locale: "fr",
+      topLocationsText: "Meilleurs Emplacements",
+      propertiesText: "Propriétés",
+   },
+   {
+      id: 3,
+      locale: "es",
+      topLocationsText: "Mejores Ubicaciones",
+      propertiesText: "Propiedades",
+   },
+   {
+      id: 4,
+      locale: "de",
+      topLocationsText: "Top-Standorte",
+      propertiesText: "Immobilien",
+   },
+   {
+      id: 5,
+      locale: "it",
+      topLocationsText: "Luoghi Principali",
+      propertiesText: "Proprietà",
+   },
+   {
+      id: 6,
+      locale: "ja",
+      topLocationsText: "人気スポット",
+      propertiesText: "物件",
+   },
+   {
+      id: 7,
+      locale: "ko",
+      topLocationsText: "인기 지역",
+      propertiesText: "매물",
+   },
+];
+
 // Heights array for creating the wave/staggered visual effect
 const CARD_HEIGHTS = [280, 340, 400, 340, 280];
 
@@ -80,12 +132,19 @@ export default function TopLocations() {
       fetchLocations();
    }, [query]);
 
+   // Find current translation or fallback to English defaults
+   const currentLocale = locale || "en";
+   const currentTranslation =
+      translations.find((t) => t.locale === currentLocale) || translations[0];
+
    if (loading)
       return <div className="text-center py-5">Loading top locations...</div>;
 
    return (
       <section className="container py-5">
-         <h2 className="fw-bold mb-4 text-dark fs-2">Top Locations</h2>
+         <h2 className="fw-bold mb-4 text-dark fs-2">
+            {currentTranslation.topLocationsText}
+         </h2>
 
          {/* Grid container aligning items to center vertically */}
          <div className="d-flex align-items-center justify-content-between gap-3 pb-3">
@@ -130,7 +189,8 @@ export default function TopLocations() {
                            {loc.country}
                         </div>
                         <div className="small fw-semibold mt-2">
-                           {loc.propertyCount.toLocaleString()} Properties
+                           {loc.propertyCount.toLocaleString()}{" "}
+                           {currentTranslation.propertiesText}
                         </div>
                      </div>
                   </div>

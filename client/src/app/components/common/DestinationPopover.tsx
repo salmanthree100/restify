@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { getStrapiMedia } from "@/lib/utils";
 import { TiLocationArrowOutline } from "react-icons/ti";
+import { useLocale } from "@/context/LocaleContext";
 
 export interface Destination {
    id: number;
@@ -74,12 +75,15 @@ export default function DestinationPopover({
    const [isLoading, setIsLoading] = useState(false);
    // 1. Add loading state for location permission check
    const [isGettingLocation, setIsGettingLocation] = useState(false);
+   const { locale } = useLocale();
 
    // 1. Fetch Suggested Destinations from Strapi
    useEffect(() => {
       const fetchDestinations = async () => {
          try {
-            const res = await fetch(`/api/strapi/destinations?populate=icon`);
+            const res = await fetch(
+               `/api/strapi/destinations?populate=icon&locale=${locale}`,
+            );
             const data = await res.json();
 
             if (Array.isArray(data?.data)) {
@@ -99,7 +103,7 @@ export default function DestinationPopover({
       };
 
       fetchDestinations();
-   }, []);
+   }, [locale]);
 
    // 1. Remove useState for recentSearch completely!
    // 2. Derive it directly during render:
