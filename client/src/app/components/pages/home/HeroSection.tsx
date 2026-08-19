@@ -247,32 +247,32 @@ const HeroSection = () => {
 
                         {/* Guests Column */}
                         <div className="flex-grow-1 px-3">
-                           <div className="fw-normal text-muted">
+                           <div className="extra-small fw-semibold text-muted">
                               <FiUsers
                                  size={20}
                                  className="me-2"
                                  color="#0C0C0C"
                               />
                               {heroData?.guestsLabel}
-                              <div className="position-relative">
-                                 {/* Trigger Input Field */}
-                                 <div
-                                    onClick={() => setIsGuestOpen(!isGuestOpen)}
-                                    className="cursor-pointer"
-                                 >
-                                    <div className="text-secondary small">
-                                       {getGuestSummary()}
-                                    </div>
+                           </div>
+                           <div className="position-relative">
+                              {/* Trigger Input Field */}
+                              <div
+                                 onClick={() => setIsGuestOpen(!isGuestOpen)}
+                                 className="cursor-pointer"
+                              >
+                                 <div className="text-secondary small">
+                                    {getGuestSummary()}
                                  </div>
-
-                                 {/* Popover */}
-                                 <GuestPopover
-                                    isOpen={isGuestOpen}
-                                    onClose={() => setIsGuestOpen(false)}
-                                    guestCounts={guestCounts}
-                                    onChangeCounts={setGuestCounts}
-                                 />
                               </div>
+
+                              {/* Popover */}
+                              <GuestPopover
+                                 isOpen={isGuestOpen}
+                                 onClose={() => setIsGuestOpen(false)}
+                                 guestCounts={guestCounts}
+                                 onChangeCounts={setGuestCounts}
+                              />
                            </div>
                         </div>
 

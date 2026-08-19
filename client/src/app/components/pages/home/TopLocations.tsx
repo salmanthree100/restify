@@ -6,6 +6,7 @@ import Image from "next/image";
 import { getStrapiMedia } from "@/lib/utils";
 import { useLocale } from "@/context/LocaleContext";
 import qs from "qs";
+import styles from "./TopLocations.module.css";
 
 interface LocationItem {
    id: number;
@@ -147,7 +148,7 @@ export default function TopLocations() {
          </h2>
 
          {/* Grid container aligning items to center vertically */}
-         <div className="d-flex align-items-center justify-content-between gap-3 pb-3">
+         <div className={`${styles.gridContainer} pb-3`}>
             {locations.map((loc, index) => {
                const imageUrl = loc.image?.url
                   ? getStrapiMedia(loc.image.url)
@@ -157,12 +158,14 @@ export default function TopLocations() {
                return (
                   <div
                      key={loc.id}
-                     className="position-relative overflow-hidden flex-shrink-0 cursor-pointer rounded-5 shadow-sm group"
-                     style={{
-                        width: "220px",
-                        height: `${cardHeight}px`,
-                        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                     }}
+                     className={`${styles.locationCard} rounded-5 shadow-sm group`}
+                     style={
+                        {
+                           "--card-height": `${cardHeight}px`,
+                           transition:
+                              "transform 0.3s ease, box-shadow 0.3s ease",
+                        } as React.CSSProperties
+                     }
                   >
                      {/* Background Location Image */}
                      <Image

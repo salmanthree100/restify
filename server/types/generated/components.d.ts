@@ -39,6 +39,58 @@ export interface BlocksHeroSection extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksJourneySection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_journey_sections';
+  info: {
+    displayName: 'Journey Section';
+  };
+  attributes: {
+    features: Schema.Attribute.Component<'elements.feature-item', true>;
+    highlightedWord: Schema.Attribute.String;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksTopPicksSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_top_picks_sections';
+  info: {
+    displayName: 'Top Picks Section';
+  };
+  attributes: {
+    buttonLink: Schema.Attribute.String;
+    buttonText: Schema.Attribute.String;
+    categories: Schema.Attribute.Component<'elements.category-card', true>;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsCategoryCard extends Struct.ComponentSchema {
+  collectionName: 'components_elements_category_cards';
+  info: {
+    displayName: 'Category Card';
+  };
+  attributes: {
+    image: Schema.Attribute.Media<'images'>;
+    link: Schema.Attribute.String;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsFeatureItem extends Struct.ComponentSchema {
+  collectionName: 'components_elements_feature_items';
+  info: {
+    displayName: 'Feature Item';
+  };
+  attributes: {
+    description: Schema.Attribute.String;
+    icon: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsStatItem extends Struct.ComponentSchema {
   collectionName: 'components_elements_stat_items';
   info: {
@@ -77,6 +129,10 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blocks.guest-category': BlocksGuestCategory;
       'blocks.hero-section': BlocksHeroSection;
+      'blocks.journey-section': BlocksJourneySection;
+      'blocks.top-picks-section': BlocksTopPicksSection;
+      'elements.category-card': ElementsCategoryCard;
+      'elements.feature-item': ElementsFeatureItem;
       'elements.stat-item': ElementsStatItem;
       'layout.header': LayoutHeader;
       'menu.nav-link': MenuNavLink;

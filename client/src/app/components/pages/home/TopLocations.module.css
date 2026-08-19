@@ -1,0 +1,43 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    justify-content: center;
+    align-items: end;
+}
+
+.locationCard {
+    width: 220px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    height: 260px;
+    /* Uniform height on mobile */
+}
+
+/* Desktop: Apply staggered heights */
+@media (min-width: 992px) {
+    .locationCard {
+        height: var(--card-height, 300px);
+    }
+}
+
+@media (max-width:768px) {
+    .gridContainer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width:600px) {
+    .gridContainer {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .locationCard {
+        width: 100%;
+        height: 260px;
+    }
+}

@@ -25,6 +25,26 @@
       "components": [
         "blocks.hero-section"
       ]
+    },
+    "journey": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.journey-section",
+      "repeatable": false
+    },
+    "topPicks": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.top-picks-section",
+      "repeatable": false
     }
   }
 }

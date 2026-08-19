@@ -156,6 +156,10 @@ a {
   transition: transform 0.4s ease;
 }
 
+.primary-text {
+  color: var(--primary-text);
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

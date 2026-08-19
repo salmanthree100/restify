@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_blocks_top_picks_sections",
+  "info": {
+    "displayName": "Top Picks Section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "buttonLink": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "component",
+      "component": "elements.category-card",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blocks_journey_sections",
+  "info": {
+    "displayName": "Journey Section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "features": {
+      "type": "component",
+      "component": "elements.feature-item",
+      "repeatable": true
+    },
+    "highlightedWord": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
