@@ -66,6 +66,18 @@ export interface BlocksTopPicksSection extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksTrendingLocations extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_trending_locations';
+  info: {
+    displayName: 'Trending Locations';
+  };
+  attributes: {
+    highlightTitle: Schema.Attribute.String;
+    locations: Schema.Attribute.Relation<'oneToMany', 'api::property.property'>;
+    mainTitle: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsCategoryCard extends Struct.ComponentSchema {
   collectionName: 'components_elements_category_cards';
   info: {
@@ -131,6 +143,7 @@ declare module '@strapi/strapi' {
       'blocks.hero-section': BlocksHeroSection;
       'blocks.journey-section': BlocksJourneySection;
       'blocks.top-picks-section': BlocksTopPicksSection;
+      'blocks.trending-locations': BlocksTrendingLocations;
       'elements.category-card': ElementsCategoryCard;
       'elements.feature-item': ElementsFeatureItem;
       'elements.stat-item': ElementsStatItem;

@@ -45,6 +45,16 @@
       },
       "component": "blocks.top-picks-section",
       "repeatable": false
+    },
+    "trendingLocations": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.trending-locations",
+      "repeatable": false
     }
   }
 }

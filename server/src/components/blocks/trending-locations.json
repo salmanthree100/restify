@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_blocks_trending_locations",
+  "info": {
+    "displayName": "Trending Locations"
+  },
+  "options": {},
+  "attributes": {
+    "highlightTitle": {
+      "type": "string"
+    },
+    "mainTitle": {
+      "type": "string"
+    },
+    "locations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::property.property"
+    }
+  },
+  "config": {}
+}

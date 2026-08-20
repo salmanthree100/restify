@@ -97,7 +97,7 @@ export default function Header() {
                      <Dropdown.Toggle
                         variant="outline-light"
                         id="user-menu-dropdown"
-                        className="d-flex align-items-center gap-1 border-secondary bg-transparent"
+                        className="d-flex align-items-center gap-1 border-0 bg-transparent"
                      >
                         <FaRegCircleUser color="#fff" size={20} />
                         <MdOutlineMenu color="#fff" size={20} />

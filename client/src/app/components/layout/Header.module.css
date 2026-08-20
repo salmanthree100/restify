@@ -1,3 +1,10 @@
 .container {
-    background-color: rgba(120, 119, 114, 1);
+    background-color: rgba(120, 119, 114, 0.8);
+    /* The blur effect that creates the glass look */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* For Safari support */
+    /* Optional: Subtle border and shadow to make it pop */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
