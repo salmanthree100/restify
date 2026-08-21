@@ -39,7 +39,7 @@ const TopPicksSection = () => {
    const [loading, setLoading] = useState<boolean>(true);
 
    useEffect(() => {
-      async function fetchJourneyData() {
+      async function fetchTopPicksData() {
          setLoading(true);
 
          const query = qs.stringify(
@@ -71,7 +71,7 @@ const TopPicksSection = () => {
          }
       }
 
-      fetchJourneyData();
+      fetchTopPicksData();
    }, [locale]);
 
    if (loading) {
