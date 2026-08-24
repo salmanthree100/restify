@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_elements_guest_stories",
+  "info": {
+    "displayName": "Guest Story"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer"
+    },
+    "quote": {
+      "type": "text"
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "positionX": {
+      "type": "decimal"
+    },
+    "positionY": {
+      "type": "decimal"
+    }
+  },
+  "config": {}
+}

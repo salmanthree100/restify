@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_blocks_guest_stories_sections",
+  "info": {
+    "displayName": "Guest Stories Section"
+  },
+  "options": {},
+  "attributes": {
+    "mainTitle": {
+      "type": "string"
+    },
+    "highlightTitle": {
+      "type": "string"
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "buttonLink": {
+      "type": "string"
+    },
+    "mapBackground": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "stories": {
+      "type": "component",
+      "component": "elements.guest-story",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

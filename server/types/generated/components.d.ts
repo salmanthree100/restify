@@ -15,6 +15,21 @@ export interface BlocksGuestCategory extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksGuestStoriesSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_guest_stories_sections';
+  info: {
+    displayName: 'Guest Stories Section';
+  };
+  attributes: {
+    buttonLink: Schema.Attribute.String;
+    buttonText: Schema.Attribute.String;
+    highlightTitle: Schema.Attribute.String;
+    mainTitle: Schema.Attribute.String;
+    mapBackground: Schema.Attribute.Media<'images'>;
+    stories: Schema.Attribute.Component<'elements.guest-story', true>;
+  };
+}
+
 export interface BlocksHeroSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_hero_sections';
   info: {
@@ -103,6 +118,22 @@ export interface ElementsFeatureItem extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsGuestStory extends Struct.ComponentSchema {
+  collectionName: 'components_elements_guest_stories';
+  info: {
+    displayName: 'Guest Story';
+  };
+  attributes: {
+    age: Schema.Attribute.Integer;
+    avatar: Schema.Attribute.Media<'images'>;
+    country: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+    positionX: Schema.Attribute.Decimal;
+    positionY: Schema.Attribute.Decimal;
+    quote: Schema.Attribute.Text;
+  };
+}
+
 export interface ElementsStatItem extends Struct.ComponentSchema {
   collectionName: 'components_elements_stat_items';
   info: {
@@ -140,12 +171,14 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'blocks.guest-category': BlocksGuestCategory;
+      'blocks.guest-stories-section': BlocksGuestStoriesSection;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.journey-section': BlocksJourneySection;
       'blocks.top-picks-section': BlocksTopPicksSection;
       'blocks.trending-locations': BlocksTrendingLocations;
       'elements.category-card': ElementsCategoryCard;
       'elements.feature-item': ElementsFeatureItem;
+      'elements.guest-story': ElementsGuestStory;
       'elements.stat-item': ElementsStatItem;
       'layout.header': LayoutHeader;
       'menu.nav-link': MenuNavLink;

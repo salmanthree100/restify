@@ -55,6 +55,16 @@
       },
       "component": "blocks.trending-locations",
       "repeatable": false
+    },
+    "guestStoriesSection": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.guest-stories-section",
+      "repeatable": false
     }
   }
 }
