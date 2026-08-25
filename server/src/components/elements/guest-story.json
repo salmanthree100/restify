@@ -29,6 +29,9 @@
     },
     "positionY": {
       "type": "decimal"
+    },
+    "ageText": {
+      "type": "string"
     }
   },
   "config": {}

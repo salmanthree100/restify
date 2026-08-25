@@ -41,6 +41,9 @@ interface PropertyData {
    bedrooms: number;
    bathrooms: number;
    pricePerNight: number;
+   bedroomsText: string;
+   bathroomsText: string;
+   pricePerNightText: string;
    isTrending: boolean;
    images?: PropertyImage[];
 }
@@ -239,11 +242,15 @@ function LocationCard({ item }: { item: PropertyData }) {
                <div className="d-flex align-items-center gap-3 text-secondary small mb-3">
                   <div className="d-flex align-items-center gap-1">
                      <IoBedOutline size={16} />
-                     <span>{item.bedrooms} Bedrooms</span>
+                     <span>
+                        {item.bedrooms} {item.bedroomsText}
+                     </span>
                   </div>
                   <div className="d-flex align-items-center gap-1">
                      <BiBath size={16} />
-                     <span>{item.bathrooms} Bathroom</span>
+                     <span>
+                        {item.bathrooms} {item.bathroomsText}
+                     </span>
                   </div>
                </div>
             </div>
@@ -253,7 +260,9 @@ function LocationCard({ item }: { item: PropertyData }) {
                <span className="fw-bold fs-5 text-dark">
                   {formatPrice(item.pricePerNight)}
                </span>
-               <span className="text-secondary small">Night</span>
+               <span className="text-secondary small">
+                  {item.pricePerNightText}
+               </span>
             </div>
          </div>
       </div>

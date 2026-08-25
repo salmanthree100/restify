@@ -125,6 +125,7 @@ export interface ElementsGuestStory extends Struct.ComponentSchema {
   };
   attributes: {
     age: Schema.Attribute.Integer;
+    ageText: Schema.Attribute.String;
     avatar: Schema.Attribute.Media<'images'>;
     country: Schema.Attribute.String;
     name: Schema.Attribute.String;

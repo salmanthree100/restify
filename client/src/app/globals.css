@@ -2,6 +2,7 @@
   --background: #ffffff;
   --foreground: #202020;
   --primary-text: #D02D11;
+  --primary-200: #F05C42;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -158,6 +159,14 @@ a {
 
 .primary-text {
   color: var(--primary-text);
+}
+
+.guest-active-dots {
+  background-color: var(--primary-text);
+}
+
+.guest-inactive-dots {
+  background-color: var(--primary-200);
 }
 
 @media (prefers-color-scheme: dark) {
