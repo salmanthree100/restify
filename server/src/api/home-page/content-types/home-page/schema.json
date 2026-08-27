@@ -65,6 +65,18 @@
       },
       "component": "blocks.guest-stories-section",
       "repeatable": false
+    },
+    "exploreSections": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "components": [
+        "blocks.explore-world",
+        "blocks.services-offer"
+      ]
     }
   }
 }

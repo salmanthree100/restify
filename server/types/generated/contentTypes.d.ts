@@ -617,6 +617,14 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    exploreSections: Schema.Attribute.DynamicZone<
+      ['blocks.explore-world', 'blocks.services-offer']
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     guestStoriesSection: Schema.Attribute.Component<
       'blocks.guest-stories-section',
       false

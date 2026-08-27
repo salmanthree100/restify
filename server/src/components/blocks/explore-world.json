@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_blocks_explore_worlds",
+  "info": {
+    "displayName": "Explore World"
+  },
+  "options": {},
+  "attributes": {
+    "mainTitle": {
+      "type": "string"
+    },
+    "highlightTitle": {
+      "type": "string"
+    },
+    "endTitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "buttonLink": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "stats": {
+      "type": "component",
+      "component": "elements.stat-badge",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

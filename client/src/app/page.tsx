@@ -4,6 +4,8 @@ import JourneySection from "@/app/components/pages/home/JourneySection";
 import TopPicksSection from "@/app/components/pages/home/TopPicksSection";
 import TrendingLocations from "@/app/components/pages/home/TrendingLocations";
 import GuestStories from "@/app/components/pages/home/GuestStories";
+import ExploreWorld from "@/app/components/pages/home/ExploreWorld";
+import ServicesOffer from "@/app/components/pages/home/ServicesOffer";
 
 const page = () => {
    return (
@@ -14,6 +16,8 @@ const page = () => {
          <TopPicksSection />
          <TrendingLocations />
          <GuestStories />
+         <ExploreWorld />
+         <ServicesOffer />
       </div>
    );
 };

@@ -1,5 +1,22 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksExploreWorld extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_explore_worlds';
+  info: {
+    displayName: 'Explore World';
+  };
+  attributes: {
+    buttonLink: Schema.Attribute.String;
+    buttonText: Schema.Attribute.String;
+    description: Schema.Attribute.RichText;
+    endTitle: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Media<'images'>;
+    highlightTitle: Schema.Attribute.String;
+    mainTitle: Schema.Attribute.String;
+    stats: Schema.Attribute.Component<'elements.stat-badge', true>;
+  };
+}
+
 export interface BlocksGuestCategory extends Struct.ComponentSchema {
   collectionName: 'components_blocks_guest_categories';
   info: {
@@ -64,6 +81,20 @@ export interface BlocksJourneySection extends Struct.ComponentSchema {
     highlightedWord: Schema.Attribute.String;
     subtitle: Schema.Attribute.String;
     title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksServicesOffer extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_services_offers';
+  info: {
+    displayName: 'Services Offer';
+  };
+  attributes: {
+    endTitle: Schema.Attribute.String;
+    features: Schema.Attribute.Component<'elements.service-feature', true>;
+    highlightTitle: Schema.Attribute.String;
+    mainTitle: Schema.Attribute.String;
+    sideImage: Schema.Attribute.Media<'images'>;
   };
 }
 
@@ -135,6 +166,29 @@ export interface ElementsGuestStory extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsServiceFeature extends Struct.ComponentSchema {
+  collectionName: 'components_elements_service_features';
+  info: {
+    displayName: 'Service Feature';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsStatBadge extends Struct.ComponentSchema {
+  collectionName: 'components_elements_stat_badges';
+  info: {
+    displayName: 'Stat Badge';
+  };
+  attributes: {
+    label: Schema.Attribute.String;
+    value: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsStatItem extends Struct.ComponentSchema {
   collectionName: 'components_elements_stat_items';
   info: {
@@ -171,15 +225,19 @@ export interface MenuNavLink extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
+      'blocks.explore-world': BlocksExploreWorld;
       'blocks.guest-category': BlocksGuestCategory;
       'blocks.guest-stories-section': BlocksGuestStoriesSection;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.journey-section': BlocksJourneySection;
+      'blocks.services-offer': BlocksServicesOffer;
       'blocks.top-picks-section': BlocksTopPicksSection;
       'blocks.trending-locations': BlocksTrendingLocations;
       'elements.category-card': ElementsCategoryCard;
       'elements.feature-item': ElementsFeatureItem;
       'elements.guest-story': ElementsGuestStory;
+      'elements.service-feature': ElementsServiceFeature;
+      'elements.stat-badge': ElementsStatBadge;
       'elements.stat-item': ElementsStatItem;
       'layout.header': LayoutHeader;
       'menu.nav-link': MenuNavLink;

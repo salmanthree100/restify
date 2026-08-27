@@ -3,6 +3,10 @@
   --foreground: #202020;
   --primary-text: #D02D11;
   --primary-200: #F05C42;
+  --text-900: #202020;
+  --text-600: #868686;
+  --text-700: #606060;
+  --text-950: #0C0C0C;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -167,6 +171,22 @@ a {
 
 .guest-inactive-dots {
   background-color: var(--primary-200);
+}
+
+.text-900 {
+  color: var(--text-900);
+}
+
+.text-600 {
+  color: var(--text-600);
+}
+
+.text-700 {
+  color: var(--text-700);
+}
+
+.text-950 {
+  color: var(--text-950);
 }
 
 @media (prefers-color-scheme: dark) {

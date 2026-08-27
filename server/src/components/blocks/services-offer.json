@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_blocks_services_offers",
+  "info": {
+    "displayName": "Services Offer"
+  },
+  "options": {},
+  "attributes": {
+    "mainTitle": {
+      "type": "string"
+    },
+    "highlightTitle": {
+      "type": "string"
+    },
+    "endTitle": {
+      "type": "string"
+    },
+    "sideImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "features": {
+      "type": "component",
+      "component": "elements.service-feature",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

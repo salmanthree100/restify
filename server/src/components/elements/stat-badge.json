@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_elements_stat_badges",
+  "info": {
+    "displayName": "Stat Badge"
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
