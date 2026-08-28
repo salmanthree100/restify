@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { LocaleProvider } from "@/context/LocaleContext";
 import Header from "@/app/components/layout/Header";
+import Footer from "@/app/components/layout/Footer";
 
 const inter = Inter({
    variable: "--font-inter",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                <LocaleProvider>
                   <Header />
                   {children}
+                  <Footer />
                </LocaleProvider>
             </CurrencyProvider>
          </body>

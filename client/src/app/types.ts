@@ -50,3 +50,36 @@ export interface HeroSectionData {
    dateLabel: string;
    guestsLabel: string;
 }
+
+// footer data types
+export interface NavLinkItem {
+   id: number;
+   label: string;
+   url: string;
+}
+
+export interface FooterColumn {
+   id: number;
+   title: string;
+   links: NavLinkItem[];
+}
+
+export interface SocialLink {
+   id: number;
+   platform: "facebook" | "twitter" | "linkedin" | "instagram";
+   url: string;
+}
+
+export interface NewsletterSection {
+   title: string;
+   description: string;
+   placeholderText: string;
+   buttonText: string;
+}
+
+export interface FooterData {
+   columns: FooterColumn[];
+   newsletter: NewsletterSection;
+   socialLinks: SocialLink[];
+   copyrightText: string;
+}

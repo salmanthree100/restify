@@ -7,6 +7,7 @@
   --text-600: #868686;
   --text-700: #606060;
   --text-950: #0C0C0C;
+  --footericonbg: #404040;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -187,6 +188,23 @@ a {
 
 .text-950 {
   color: var(--text-950);
+}
+
+.subscribe-btn {
+  background-color: var(--primary-text) !important;
+}
+
+.footer-input {
+  background-color: var(--text-900) !important;
+  color: var(--text-600) !important;
+}
+
+.footer-input::placeholder {
+  color: var(--text-600) !important;
+}
+
+.footer-social-links {
+  background-color: var(--footericonbg) !important;
 }
 
 @media (prefers-color-scheme: dark) {

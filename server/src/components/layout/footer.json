@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_layout_footers",
+  "info": {
+    "displayName": "Footer"
+  },
+  "options": {},
+  "attributes": {
+    "columns": {
+      "type": "component",
+      "component": "menu.footer-column",
+      "repeatable": true
+    },
+    "newsletter": {
+      "type": "component",
+      "component": "blocks.newsletter-section",
+      "repeatable": false
+    },
+    "socialLinks": {
+      "type": "component",
+      "component": "elements.social-link",
+      "repeatable": true
+    },
+    "copyrightText": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

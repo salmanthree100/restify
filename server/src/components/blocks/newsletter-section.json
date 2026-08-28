@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_blocks_newsletter_sections",
+  "info": {
+    "displayName": "Newsletter Section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "placeholderText": {
+      "type": "string"
+    },
+    "buttonText": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

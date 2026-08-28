@@ -84,6 +84,19 @@ export interface BlocksJourneySection extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksNewsletterSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_newsletter_sections';
+  info: {
+    displayName: 'Newsletter Section';
+  };
+  attributes: {
+    buttonText: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    placeholderText: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksServicesOffer extends Struct.ComponentSchema {
   collectionName: 'components_blocks_services_offers';
   info: {
@@ -178,6 +191,19 @@ export interface ElementsServiceFeature extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsSocialLink extends Struct.ComponentSchema {
+  collectionName: 'components_elements_social_links';
+  info: {
+    displayName: 'Social Link';
+  };
+  attributes: {
+    platform: Schema.Attribute.Enumeration<
+      ['facebook', 'twitter', 'linkedin', 'instagram']
+    >;
+    url: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsStatBadge extends Struct.ComponentSchema {
   collectionName: 'components_elements_stat_badges';
   info: {
@@ -200,6 +226,19 @@ export interface ElementsStatItem extends Struct.ComponentSchema {
   };
 }
 
+export interface LayoutFooter extends Struct.ComponentSchema {
+  collectionName: 'components_layout_footers';
+  info: {
+    displayName: 'Footer';
+  };
+  attributes: {
+    columns: Schema.Attribute.Component<'menu.footer-column', true>;
+    copyrightText: Schema.Attribute.String;
+    newsletter: Schema.Attribute.Component<'blocks.newsletter-section', false>;
+    socialLinks: Schema.Attribute.Component<'elements.social-link', true>;
+  };
+}
+
 export interface LayoutHeader extends Struct.ComponentSchema {
   collectionName: 'components_layout_headers';
   info: {
@@ -208,6 +247,17 @@ export interface LayoutHeader extends Struct.ComponentSchema {
   attributes: {
     headerLinks: Schema.Attribute.Component<'menu.nav-link', true>;
     logo: Schema.Attribute.Media<'images'>;
+  };
+}
+
+export interface MenuFooterColumn extends Struct.ComponentSchema {
+  collectionName: 'components_menu_footer_columns';
+  info: {
+    displayName: 'Footer Column';
+  };
+  attributes: {
+    links: Schema.Attribute.Component<'menu.nav-link', true>;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -230,6 +280,7 @@ declare module '@strapi/strapi' {
       'blocks.guest-stories-section': BlocksGuestStoriesSection;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.journey-section': BlocksJourneySection;
+      'blocks.newsletter-section': BlocksNewsletterSection;
       'blocks.services-offer': BlocksServicesOffer;
       'blocks.top-picks-section': BlocksTopPicksSection;
       'blocks.trending-locations': BlocksTrendingLocations;
@@ -237,9 +288,12 @@ declare module '@strapi/strapi' {
       'elements.feature-item': ElementsFeatureItem;
       'elements.guest-story': ElementsGuestStory;
       'elements.service-feature': ElementsServiceFeature;
+      'elements.social-link': ElementsSocialLink;
       'elements.stat-badge': ElementsStatBadge;
       'elements.stat-item': ElementsStatItem;
+      'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
+      'menu.footer-column': MenuFooterColumn;
       'menu.nav-link': MenuNavLink;
     }
   }
