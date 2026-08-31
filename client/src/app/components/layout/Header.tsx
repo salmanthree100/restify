@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import Link from "next/link";
 import LanguageCurrencyModal from "@/app/components/common/LanguageCurrencyModal";
+import AuthModal from "@/app/components/auth/AuthModal";
 import qs from "qs";
 import { useLocale } from "@/context/LocaleContext";
+import { useAuth } from "@/context/AuthContext";
 import { getStrapiMedia } from "@/lib/utils";
 import Image from "next/image";
 import { HeaderData } from "@/app/types";
@@ -17,7 +19,12 @@ import { CiGlobe } from "react-icons/ci";
 
 export default function Header() {
    const [showLangModal, setShowLangModal] = useState(false);
-   const [isLoggedIn, setIsLoggedIn] = useState(false); // Toggle based on your Auth state
+   const [showAuthModal, setShowAuthModal] = useState(false);
+
+   // Consume authentication state from AuthContext
+   const { user, logout } = useAuth();
+   const isLoggedIn = Boolean(user);
+
    const { locale } = useLocale();
    const [headerData, setHeaderData] = useState<HeaderData | null>(null);
 
@@ -40,7 +47,6 @@ export default function Header() {
       const fetchHeader = async () => {
          const response = await fetch(`/api/strapi/global?${query}`);
          const data = await response.json();
-         console.log(data?.data?.header);
          setHeaderData(data?.data?.header);
       };
       fetchHeader();
@@ -194,7 +200,7 @@ export default function Header() {
                               <Dropdown.Divider />
 
                               <Dropdown.Item
-                                 onClick={() => setIsLoggedIn(false)}
+                                 onClick={logout}
                                  className="py-2 text-dark"
                               >
                                  Log out
@@ -203,18 +209,10 @@ export default function Header() {
                         ) : (
                            <>
                               <Dropdown.Item
-                                 as={Link}
-                                 href="/login"
+                                 onClick={() => setShowAuthModal(true)}
                                  className="fw-bold py-2"
                               >
-                                 Log in
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                 as={Link}
-                                 href="/signup"
-                                 className="py-2"
-                              >
-                                 Sign up
+                                 Log in or Signup
                               </Dropdown.Item>
                            </>
                         )}
@@ -228,6 +226,12 @@ export default function Header() {
          <LanguageCurrencyModal
             show={showLangModal}
             onHide={() => setShowLangModal(false)}
+         />
+
+         {/* Authentication Modal */}
+         <AuthModal
+            show={showAuthModal}
+            onHide={() => setShowAuthModal(false)}
          />
       </section>
    );

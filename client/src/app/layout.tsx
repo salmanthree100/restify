@@ -6,6 +6,7 @@ import { CurrencyProvider } from "@/context/CurrencyContext";
 import { LocaleProvider } from "@/context/LocaleContext";
 import Header from "@/app/components/layout/Header";
 import Footer from "@/app/components/layout/Footer";
+import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({
    variable: "--font-inter",
@@ -23,9 +24,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
          <body>
             <CurrencyProvider>
                <LocaleProvider>
-                  <Header />
-                  {children}
-                  <Footer />
+                  <AuthProvider>
+                     <Header />
+                     {children}
+                     <Footer />
+                  </AuthProvider>
                </LocaleProvider>
             </CurrencyProvider>
          </body>
