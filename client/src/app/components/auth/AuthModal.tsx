@@ -11,6 +11,9 @@ import {
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useAuth, User } from "@/context/AuthContext";
+import { defaultCountries, parseCountry } from "react-international-phone";
+import * as Flags from "country-flag-icons/react/3x2";
+import { formatE164 } from "@/lib/utils";
 
 interface AuthModalProps {
    show: boolean;
@@ -26,13 +29,15 @@ interface StrapiAuthResponse {
    };
 }
 
-const countryCodes = [
-   { code: "+92", country: "Pakistan", flag: "🇵🇰" },
-   { code: "+48", country: "Sweden", flag: "🇸🇪" },
-   { code: "+1", country: "United States", flag: "🇺🇸" },
-   { code: "+44", country: "United Kingdom", flag: "🇬🇧" },
-   { code: "+49", country: "Germany", flag: "🇩🇪" },
-];
+// Convert react-international-phone data into your dropdown format dynamically
+const countryOptions = defaultCountries.map((country) => {
+   const parsed = parseCountry(country);
+   return {
+      name: parsed.name,
+      iso2: parsed.iso2.toUpperCase(),
+      dialCode: `+${parsed.dialCode}`,
+   };
+});
 
 export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
    // Consume AuthContext hook
@@ -56,7 +61,27 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
    const [email, setEmail] = useState<string>("");
    const [password, setPassword] = useState<string>("");
 
+   // custom country list states
+   const [isOpen, setIsOpen] = useState<boolean>(false);
+   const [searchTerm, setSearchTerm] = useState<string>("");
+
    const fullPhoneNumber = `${selectedCountry}${phoneNumber.replace(/^0+/, "").replace(/\s+/g, "")}`;
+
+   // Find the matching country based on your dialCode state ("+92")
+   const currentCountry =
+      countryOptions.find((c) => c.dialCode === selectedCountry) ||
+      countryOptions.find((c) => c.iso2 === "PK") ||
+      countryOptions[0];
+
+   // Dynamic flag component
+   const CurrentFlag = Flags[currentCountry.iso2 as keyof typeof Flags];
+
+   const filteredCountries = countryOptions.filter(
+      (c) =>
+         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         c.dialCode.includes(searchTerm) ||
+         c.iso2.toLowerCase().includes(searchTerm.toLowerCase()),
+   );
 
    // Helper handler for successful authentication
    const handleAuthSuccess = (jwt: string, user: User) => {
@@ -73,35 +98,49 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
    };
 
    // 1. Mobile Step 1: Send SMS OTP
+   // 3. Your handleSendOtp function
    const handleSendOtp = async (e: FormEvent) => {
       e.preventDefault();
       setLoading(true);
       setErrorMsg("");
+
+      // Pass your state variable `selectedCountry` here
+      const e164PhoneNumber = formatE164(selectedCountry, phoneNumber);
+      // Check your browser console: It MUST display "+923478359046"
+      console.log("Sending to Firebase:", e164PhoneNumber);
+
+      // Validate E.164 format (+ symbol followed by 7 to 15 digits)
+      const isValidE164 = /^\+[1-9]\d{6,14}$/.test(e164PhoneNumber);
+
+      if (!isValidE164) {
+         setErrorMsg(`Invalid phone format: ${e164PhoneNumber}`);
+         setLoading(false);
+         return;
+      }
 
       try {
          if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new RecaptchaVerifier(
                auth,
                "recaptcha-container",
-               {
-                  size: "invisible",
-               },
+               { size: "invisible" },
             );
          }
 
          const confirmation = await signInWithPhoneNumber(
             auth,
-            fullPhoneNumber,
+            e164PhoneNumber,
             window.recaptchaVerifier,
          );
 
          setConfirmationResult(confirmation);
          setMobileStep("enter-otp");
       } catch (err: unknown) {
-         console.error(err);
+         console.error("Firebase Auth Error:", err);
          const message =
             err instanceof Error ? err.message : "Failed to send SMS code.";
          setErrorMsg(message);
+
          if (window.recaptchaVerifier) {
             try {
                window.recaptchaVerifier.clear();
@@ -127,14 +166,11 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
          const userCredential = await confirmationResult.confirm(otpCode);
          const firebaseIdToken = await userCredential.user.getIdToken();
 
-         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_LOCAL_URL}/api/auth-firebase`,
-            {
-               method: "POST",
-               headers: { "Content-Type": "application/json" },
-               body: JSON.stringify({ idToken: firebaseIdToken }),
-            },
-         );
+         const res = await fetch("/api/strapi/auth-firebase", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken: firebaseIdToken }),
+         });
 
          const data: StrapiAuthResponse = await res.json();
          if (!res.ok)
@@ -159,20 +195,34 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
       setErrorMsg("");
 
       try {
-         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/auth/local`,
-            {
+         // 1. Attempt Sign-In
+         // Call the Next.js rewrite endpoint directly using a relative path
+         let res = await fetch("/api/strapi/auth/local", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ identifier: email, password }),
+         });
+         let data = await res.json();
+
+         // 2. If invalid credentials, attempt Auto-Registration for new users
+         if (
+            !res.ok &&
+            data?.error?.message === "Invalid identifier or password"
+         ) {
+            const username = email.split("@")[0];
+
+            res = await fetch(`/api/strapi/auth/local/register`, {
                method: "POST",
                headers: { "Content-Type": "application/json" },
-               body: JSON.stringify({ identifier: email, password }),
-            },
-         );
+               body: JSON.stringify({ username, email, password }),
+            });
 
-         const data: StrapiAuthResponse = await res.json();
-         if (!res.ok)
-            throw new Error(
-               data?.error?.message || "Invalid email or password.",
-            );
+            data = await res.json();
+         }
+
+         if (!res.ok) {
+            throw new Error(data?.error?.message || "Authentication failed.");
+         }
 
          handleAuthSuccess(data.jwt, data.user);
       } catch (err: unknown) {
@@ -186,10 +236,12 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
 
    // 4. Social OAuth Provider Redirect
    const handleOAuthLogin = (provider: "google" | "facebook" | "apple") => {
-      const baseUrl =
-         process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
-      const oauthUrl = new URL(`/api/connect/${provider}`, baseUrl);
-      window.location.assign(oauthUrl);
+      // Construct a full absolute URL using the browser's current origin
+      const oauthUrl = new URL(
+         `/api/strapi/connect/${provider}`,
+         window.location.origin,
+      );
+      window.location.href = oauthUrl.toString();
    };
 
    return (
@@ -214,7 +266,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                      eventKey="email"
                      className={`p-0 pb-1 border-0 bg-transparent fw-medium ${
                         activeTab === "email"
-                           ? "text-danger border-bottom border-danger border-2"
+                           ? "primary-text border-bottom border-danger border-2"
                            : "text-muted"
                      }`}
                   >
@@ -226,7 +278,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                      eventKey="mobile"
                      className={`p-0 pb-1 border-0 bg-transparent fw-medium ${
                         activeTab === "mobile"
-                           ? "text-danger border-bottom border-danger border-2"
+                           ? "primary-text border-bottom border-danger border-2"
                            : "text-muted"
                      }`}
                   >
@@ -243,20 +295,94 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                mobileStep === "enter-phone" ? (
                   <Form onSubmit={handleSendOtp}>
                      <Form.Group className="mb-3">
-                        <Form.Label className="fs-7 fw-medium text-dark">
-                           Country/Region<span className="text-danger">*</span>
-                        </Form.Label>
-                        <Form.Select
-                           value={selectedCountry}
-                           onChange={(e) => setSelectedCountry(e.target.value)}
-                           className="py-2"
-                        >
-                           {countryCodes.map((item) => (
-                              <option key={item.code} value={item.code}>
-                                 {item.flag} {item.country} ({item.code})
-                              </option>
-                           ))}
-                        </Form.Select>
+                        {/* Country / Region Custom Dropdown */}
+                        <div className="position-relative">
+                           <label className="form-label text-muted small fw-semibold mb-1">
+                              Country/Region
+                              <span className="text-danger">*</span>
+                           </label>
+
+                           {/* Selected Box Display */}
+                           <div
+                              onClick={() => setIsOpen(!isOpen)}
+                              className="form-control d-flex align-items-center justify-content-between py-2 px-3 rounded-3 cursor-pointer"
+                              style={{ height: "48px", cursor: "pointer" }}
+                           >
+                              <div className="d-flex align-items-center gap-2">
+                                 {CurrentFlag && (
+                                    <CurrentFlag
+                                       style={{
+                                          width: "22px",
+                                          height: "15px",
+                                          borderRadius: "2px",
+                                       }}
+                                    />
+                                 )}
+                                 <span className="fw-medium text-dark">
+                                    {currentCountry.name} (
+                                    {currentCountry.dialCode})
+                                 </span>
+                              </div>
+                              <small className="text-muted">▼</small>
+                           </div>
+
+                           {/* Expanded Options List */}
+                           {isOpen && (
+                              <div
+                                 className="position-absolute start-0 w-100 bg-white border rounded-3 shadow-lg mt-1 p-2"
+                                 style={{
+                                    zIndex: 1000,
+                                    maxHeight: "260px",
+                                    overflowY: "auto",
+                                 }}
+                              >
+                                 <input
+                                    type="text"
+                                    placeholder="Search country or code..."
+                                    value={searchTerm}
+                                    onChange={(e) =>
+                                       setSearchTerm(e.target.value)
+                                    }
+                                    className="form-control form-control-sm mb-2"
+                                    autoFocus
+                                 />
+
+                                 {filteredCountries.map((c) => {
+                                    const ItemFlag =
+                                       Flags[c.iso2 as keyof typeof Flags];
+                                    return (
+                                       <div
+                                          key={c.iso2}
+                                          onClick={() => {
+                                             setSelectedCountry(c.dialCode); // Sets "+92" directly in state
+                                             setIsOpen(false);
+                                             setSearchTerm("");
+                                          }}
+                                          className={`d-flex align-items-center gap-2 px-2 py-2 rounded-2 ${
+                                             c.iso2 === selectedCountry
+                                                ? "bg-light fw-bold"
+                                                : ""
+                                          }`}
+                                          style={{ cursor: "pointer" }}
+                                       >
+                                          {ItemFlag && (
+                                             <ItemFlag
+                                                style={{
+                                                   width: "22px",
+                                                   height: "15px",
+                                                   borderRadius: "2px",
+                                                }}
+                                             />
+                                          )}
+                                          <span className="small text-dark">
+                                             {c.name} ({c.dialCode})
+                                          </span>
+                                       </div>
+                                    );
+                                 })}
+                              </div>
+                           )}
+                        </div>
                      </Form.Group>
 
                      <Form.Group className="mb-4">
@@ -277,7 +403,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                         variant="danger"
                         type="submit"
                         disabled={loading || !phoneNumber}
-                        className="w-100 py-2 fw-semibold rounded-3"
+                        className="w-100 py-2 fw-semibold rounded-3 subscribe-btn"
                      >
                         {loading ? "Sending Code..." : "Continue"}
                      </Button>
@@ -357,7 +483,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                      variant="danger"
                      type="submit"
                      disabled={loading}
-                     className="w-100 py-2 fw-semibold rounded-3"
+                     className="w-100 py-2 fw-semibold rounded-3 subscribe-btn"
                   >
                      {loading ? "Authenticating..." : "Continue"}
                   </Button>

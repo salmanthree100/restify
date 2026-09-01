@@ -29,3 +29,27 @@ export function getStrapiMedia(url?: string | null): string | null {
 
    return `${cleanBaseUrl}/${cleanRelativeUrl}`;
 }
+
+// Helper function to format any raw inputs into strict E.164 standard
+// Improved formatE164 that handles ISO codes, dial codes, or full country strings
+export function formatE164(countryVal: string, rawNumber: string) {
+   // If `countryVal` is an ISO code like "PK", map it to the dial code or ensure dial code extraction
+   let cleanCountry = countryVal;
+
+   // If passed an ISO code (e.g. "PK"), fall back to numeric dial code matching if needed
+   if (!/\d/.test(countryVal)) {
+      // Replace with a mapping or your dial code variable if stored separately
+      // Example: if stored as ISO code "PK", use its dial code "92"
+      cleanCountry = "92"; // Default fallback or extract from countryOptions
+   }
+
+   const countryDigits = cleanCountry.replace(/\D/g, "");
+   let phoneDigits = rawNumber.replace(/\D/g, "");
+
+   // Strip leading 0 if present (e.g., "0347..." -> "347...")
+   if (phoneDigits.startsWith("0")) {
+      phoneDigits = phoneDigits.substring(1);
+   }
+
+   return `+${countryDigits}${phoneDigits}`;
+}

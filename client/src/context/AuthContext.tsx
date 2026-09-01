@@ -116,6 +116,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
    }, [fetchCurrentUser]);
 
+   // In AuthContext.tsx
+   useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const accessToken =
+         urlParams.get("access_token") || urlParams.get("raw[access_token]");
+
+      if (accessToken) {
+         const STRAPI_URL =
+            process.env.NEXT_PUBLIC_STRAPI_CLOUD_URL || "http://localhost:1337";
+
+         fetch(
+            `${STRAPI_URL}/api/auth/google/callback?access_token=${accessToken}`,
+         )
+            .then((res) => res.json())
+            .then((data) => {
+               if (data.jwt && data.user) {
+                  localStorage.setItem("token", data.jwt);
+                  setUser(data.user);
+                  // Remove query params from browser bar smoothly
+                  window.history.replaceState(
+                     {},
+                     document.title,
+                     window.location.pathname,
+                  );
+               }
+            })
+            .catch((err) =>
+               console.error("Error exchanging OAuth token:", err),
+            );
+      }
+   }, []);
+
    // 5. Refetch Helper
    const refetchUser = useCallback(async () => {
       if (token) {

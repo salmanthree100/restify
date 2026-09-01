@@ -163,7 +163,7 @@ a {
 }
 
 .primary-text {
-  color: var(--primary-text);
+  color: var(--primary-text) !important;
 }
 
 .guest-active-dots {
