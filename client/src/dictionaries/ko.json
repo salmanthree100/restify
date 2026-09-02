@@ -1,0 +1,28 @@
+{
+   "auth": {
+      "modalTitle": "로그인 또는 회원가입",
+      "emailTab": {
+         "title": "이메일",
+         "emailLabel": "이메일 주소",
+         "passwordLabel": "비밀번호",
+         "emailPlaceholder": "이메일을 입력하세요",
+         "passwordPlaceholder": "비밀번호를 입력하세요"
+      },
+      "mobileTab": {
+         "title": "이동하는",
+         "countryLabel": "국가/지역",
+         "mobileNumberLabel": "전화번호",
+         "mobileNumberPlaceholder": "휴대폰 번호를 입력하세요",
+         "countrySearchPlaceholder": "국가 또는 국가 코드 검색...",
+         "sendingCodeText": "코드 전송 중...",
+         "codeLabel": "6자리 코드를 입력하세요",
+         "codePlaceholder": "123456",
+         "codeVerifyingText": "확인 중...",
+         "codeLoginText": "인증 및 로그인"
+      },
+      "continueBtnText": "계속",
+      "socialLoginText": "또는 다음으로 계속",
+      "codeSentText": "인증번호 발송:",
+      "editBtnText": "수정"
+   }
+}

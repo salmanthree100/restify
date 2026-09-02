@@ -1,0 +1,28 @@
+{
+   "auth": {
+      "modalTitle": "Connexion ou inscription",
+      "emailTab": {
+         "title": "E-mail",
+         "emailLabel": "Adresse e-mail",
+         "passwordLabel": "Mot de passe",
+         "emailPlaceholder": "Entrez votre e-mail",
+         "passwordPlaceholder": "Entrez votre mot de passe"
+      },
+      "mobileTab": {
+         "title": "Mobile",
+         "countryLabel": "Pays/Région",
+         "mobileNumberLabel": "Numéro de téléphone",
+         "mobileNumberPlaceholder": "Saisissez votre numéro de téléphone portable",
+         "countrySearchPlaceholder": "Rechercher un pays ou un code...",
+         "sendingCodeText": "Envoi du code...",
+         "codeLabel": "Saisissez le code à 6 chiffres",
+         "codePlaceholder": "123456",
+         "codeVerifyingText": "Vérification en cours...",
+         "codeLoginText": "Vérifier et se connecter"
+      },
+      "continueBtnText": "Continuer",
+      "socialLoginText": "ou continuer avec",
+      "codeSentText": "Code envoyé à",
+      "editBtnText": "Modifier"
+   }
+}

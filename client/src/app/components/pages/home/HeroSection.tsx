@@ -284,14 +284,16 @@ const HeroSection = () => {
                            rootClose={true}
                            onHide={() => setShowDatePicker(false)}
                         >
+                           {/* eslint-disable @typescript-eslint/no-unused-vars */}
                            {({
                               placement,
                               arrowProps,
                               show: _show,
                               popper,
-                              hasDoneInitialMeasure, // 👈 Destructure this here to prevent it passing to the div
+                              hasDoneInitialMeasure,
                               ...props
                            }) => (
+                              /* eslint-enable @typescript-eslint/no-unused-vars */
                               <div
                                  {...props}
                                  style={{

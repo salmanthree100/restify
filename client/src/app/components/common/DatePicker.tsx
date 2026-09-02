@@ -101,7 +101,7 @@ export default function DatePicker({
                <DayPicker
                   mode="range"
                   numberOfMonths={2}
-                  defaultMonth={new Date(2026, 7)} // Anchor calendar explicitly to Sep 2026
+                  defaultMonth={new Date(2026, 8)} // Anchor calendar explicitly to Sep 2026
                   selected={selectedRange}
                   onSelect={handleSelect}
                   disabled={{ before: pastDisabledThreshold }}

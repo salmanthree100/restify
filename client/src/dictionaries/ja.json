@@ -1,0 +1,28 @@
+{
+   "auth": {
+      "modalTitle": "ログインまたは新規登録",
+      "emailTab": {
+         "title": "メール",
+         "emailLabel": "メールアドレス",
+         "passwordLabel": "パスワード",
+         "emailPlaceholder": "メールアドレスを入力",
+         "passwordPlaceholder": "パスワードを入力"
+      },
+      "mobileTab": {
+         "title": "携帯",
+         "countryLabel": "国/地域",
+         "mobileNumberLabel": "電話番号",
+         "mobileNumberPlaceholder": "携帯電話番号を入力してください",
+         "countrySearchPlaceholder": "国名または国番号を検索...",
+         "sendingCodeText": "コードを送信しています...",
+         "codeLabel": "6桁のコードを入力してください",
+         "codePlaceholder": "123456",
+         "codeVerifyingText": "確認中...",
+         "codeLoginText": "確認してサインイン"
+      },
+      "continueBtnText": "続行",
+      "socialLoginText": "または次で続行",
+      "codeSentText": "送信先コード:",
+      "editBtnText": "編集"
+   }
+}

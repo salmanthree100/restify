@@ -14,6 +14,7 @@ import { useAuth, User } from "@/context/AuthContext";
 import { defaultCountries, parseCountry } from "react-international-phone";
 import * as Flags from "country-flag-icons/react/3x2";
 import { formatE164 } from "@/lib/utils";
+import { useLocale } from "@/context/LocaleContext";
 
 interface AuthModalProps {
    show: boolean;
@@ -42,8 +43,10 @@ const countryOptions = defaultCountries.map((country) => {
 export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
    // Consume AuthContext hook
    const { login } = useAuth();
+   // consume useLocale hook
+   const { t } = useLocale();
 
-   const [activeTab, setActiveTab] = useState<"email" | "mobile">("mobile");
+   const [activeTab, setActiveTab] = useState<"email" | "mobile">("email");
    const [loading, setLoading] = useState<boolean>(false);
    const [errorMsg, setErrorMsg] = useState<string>("");
 
@@ -250,7 +253,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
 
          <Modal.Header closeButton className="border-0 pb-0">
             <Modal.Title className="w-100 text-center fs-6 fw-bold">
-               Login or Sign up
+               {t.auth.modalTitle}
             </Modal.Title>
          </Modal.Header>
 
@@ -270,7 +273,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                            : "text-muted"
                      }`}
                   >
-                     Email
+                     {t.auth.emailTab.title}
                   </Nav.Link>
                </Nav.Item>
                <Nav.Item>
@@ -282,7 +285,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                            : "text-muted"
                      }`}
                   >
-                     Mobile
+                     {t.auth.mobileTab.title}
                   </Nav.Link>
                </Nav.Item>
             </Nav>
@@ -297,9 +300,9 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                      <Form.Group className="mb-3">
                         {/* Country / Region Custom Dropdown */}
                         <div className="position-relative">
-                           <label className="form-label text-muted small fw-semibold mb-1">
-                              Country/Region
-                              <span className="text-danger">*</span>
+                           <label className="form-label fs-7 fw-medium text-dark mb-1">
+                              {t.auth.mobileTab.countryLabel}
+                              <span className="primary-text">*</span>
                            </label>
 
                            {/* Selected Box Display */}
@@ -338,7 +341,9 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                               >
                                  <input
                                     type="text"
-                                    placeholder="Search country or code..."
+                                    placeholder={
+                                       t.auth.mobileTab.countrySearchPlaceholder
+                                    }
                                     value={searchTerm}
                                     onChange={(e) =>
                                        setSearchTerm(e.target.value)
@@ -387,11 +392,14 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
 
                      <Form.Group className="mb-4">
                         <Form.Label className="fs-7 fw-medium text-dark">
-                           Phone number<span className="text-danger">*</span>
+                           {t.auth.mobileTab.mobileNumberLabel}
+                           <span className="primary-text">*</span>
                         </Form.Label>
                         <Form.Control
                            type="tel"
-                           placeholder="347 8359046"
+                           placeholder={
+                              t.auth.mobileTab.mobileNumberPlaceholder
+                           }
                            value={phoneNumber}
                            onChange={(e) => setPhoneNumber(e.target.value)}
                            required
@@ -405,33 +413,36 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                         disabled={loading || !phoneNumber}
                         className="w-100 py-2 fw-semibold rounded-3 subscribe-btn"
                      >
-                        {loading ? "Sending Code..." : "Continue"}
+                        {loading
+                           ? t.auth.mobileTab.sendingCodeText
+                           : t.auth.continueBtnText}
                      </Button>
                   </Form>
                ) : (
                   <Form onSubmit={handleVerifyOtp}>
                      <div className="mb-3">
                         <span className="fs-7 text-muted">
-                           Code sent to <strong>{fullPhoneNumber}</strong>
+                           {t.auth.codeSentText}{" "}
+                           <strong>{fullPhoneNumber}</strong>
                         </span>{" "}
                         <button
                            type="button"
                            onClick={() => setMobileStep("enter-phone")}
-                           className="btn btn-link p-0 fs-7 text-danger text-decoration-none ms-1"
+                           className="btn btn-link p-0 fs-7 primary-text text-decoration-none ms-1"
                         >
-                           Edit
+                           {t.auth.editBtnText}
                         </button>
                      </div>
 
                      <Form.Group className="mb-4">
                         <Form.Label className="fs-7 fw-medium text-dark">
-                           Enter 6-digit Code
-                           <span className="text-danger">*</span>
+                           {t.auth.mobileTab.codeLabel}
+                           <span className="primary-text">*</span>
                         </Form.Label>
                         <Form.Control
                            type="text"
                            maxLength={6}
-                           placeholder="123456"
+                           placeholder={t.auth.mobileTab.codePlaceholder}
                            value={otpCode}
                            onChange={(e) => setOtpCode(e.target.value)}
                            required
@@ -443,9 +454,11 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                         variant="danger"
                         type="submit"
                         disabled={loading || otpCode.length < 4}
-                        className="w-100 py-2 fw-semibold rounded-3"
+                        className="w-100 py-2 fw-semibold rounded-3 subscribe-btn"
                      >
-                        {loading ? "Verifying..." : "Verify & Sign In"}
+                        {loading
+                           ? t.auth.mobileTab.codeVerifyingText
+                           : t.auth.mobileTab.codeLoginText}
                      </Button>
                   </Form>
                )
@@ -453,11 +466,12 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                <Form onSubmit={handleEmailAuth}>
                   <Form.Group className="mb-3">
                      <Form.Label className="fs-7 fw-medium text-dark">
-                        Email address<span className="text-danger">*</span>
+                        {t.auth.emailTab.emailLabel}
+                        <span className="primary-text">*</span>
                      </Form.Label>
                      <Form.Control
                         type="email"
-                        placeholder="name@example.com"
+                        placeholder={t.auth.emailTab.emailPlaceholder}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -467,11 +481,12 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
 
                   <Form.Group className="mb-4">
                      <Form.Label className="fs-7 fw-medium text-dark">
-                        Password<span className="text-danger">*</span>
+                        {t.auth.emailTab.passwordLabel}
+                        <span className="primary-text">*</span>
                      </Form.Label>
                      <Form.Control
                         type="password"
-                        placeholder="••••••••"
+                        placeholder={t.auth.emailTab.passwordPlaceholder}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -485,7 +500,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
                      disabled={loading}
                      className="w-100 py-2 fw-semibold rounded-3 subscribe-btn"
                   >
-                     {loading ? "Authenticating..." : "Continue"}
+                     {loading ? "Authenticating..." : t.auth.continueBtnText}
                   </Button>
                </Form>
             )}
@@ -493,7 +508,7 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
             <div className="position-relative my-4 text-center">
                <hr className="text-muted opacity-25" />
                <span className="position-absolute top-50 start-50 translate-middle bg-white px-3 fs-7 text-muted">
-                  or continue with
+                  {t.auth.socialLoginText}
                </span>
             </div>
 

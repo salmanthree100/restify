@@ -1,0 +1,28 @@
+{
+   "auth": {
+      "modalTitle": "Anmelden oder Registrieren",
+      "emailTab": {
+         "title": "E-Mail",
+         "emailLabel": "E-Mail-Adresse",
+         "passwordLabel": "Passwort",
+         "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
+         "passwordPlaceholder": "Geben Sie Ihr Passwort ein"
+      },
+      "mobileTab": {
+         "title": "Mobile",
+         "countryLabel": "Land/Region",
+         "mobileNumberLabel": "Telefonnummer",
+         "mobileNumberPlaceholder": "Geben Sie Ihre Handynummer ein",
+         "countrySearchPlaceholder": "Land oder Vorwahl suchen...",
+         "sendingCodeText": "Sendecode...",
+         "codeLabel": "Geben Sie den 6-stelligen Code ein",
+         "codePlaceholder": "123456",
+         "codeVerifyingText": "Überprüfung läuft...",
+         "codeLoginText": "Verifizieren & Anmelden"
+      },
+      "continueBtnText": "Weiter",
+      "socialLoginText": "oder weiter mit",
+      "codeSentText": "Code gesendet an",
+      "editBtnText": "Bearbeiten"
+   }
+}

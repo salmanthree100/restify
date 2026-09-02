@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, CSSProperties } from "react";
 import {
    Modal,
    Nav,
@@ -11,19 +11,89 @@ import {
    Col,
    Button,
 } from "react-bootstrap";
+import {
+   US,
+   GB,
+   FR,
+   DE,
+   JP,
+   ES,
+   IT,
+   KR,
+   EU,
+} from "country-flag-icons/react/3x2";
 import { useCurrency } from "@/context/CurrencyContext";
-import { StrapiCurrency, LanguageItem } from "@/app/types";
-import { useLocale } from "@/context/LocaleContext";
+import { StrapiCurrency } from "@/app/types";
+import { useLocale, SupportedLocale } from "@/context/LocaleContext";
 
-const LANGUAGES: LanguageItem[] = [
-   { code: "en-US", name: "English", region: "United States", flag: "🇺🇸" },
-   { code: "en-GB", name: "English", region: "United Kingdom", flag: "🇬🇧" },
-   { code: "fr-FR", name: "French", region: "France", flag: "🇫🇷" },
-   { code: "de-DE", name: "German", region: "Germany", flag: "🇩🇪" },
-   { code: "ja-JP", name: "Japanese", region: "Japan", flag: "🇯🇵" },
-   { code: "es-ES", name: "Spanish", region: "Spain", flag: "🇪🇸" },
-   { code: "it-IT", name: "Italian", region: "Italy", flag: "🇮🇹" },
-   { code: "ko-KR", name: "Korean", region: "South Korea", flag: "🇰🇷" },
+interface EnhancedLanguageItem {
+   code: string;
+   name: string;
+   region: string;
+   flagCode: string;
+   FlagComponent: React.ComponentType<{
+      className?: string;
+      style?: CSSProperties;
+   }>;
+}
+
+const LANGUAGES: EnhancedLanguageItem[] = [
+   {
+      code: "en-US",
+      name: "English",
+      region: "United States",
+      flagCode: "US",
+      FlagComponent: US,
+   },
+   {
+      code: "en-GB",
+      name: "English",
+      region: "United Kingdom",
+      flagCode: "GB",
+      FlagComponent: GB,
+   },
+   {
+      code: "fr-FR",
+      name: "French",
+      region: "France",
+      flagCode: "FR",
+      FlagComponent: FR,
+   },
+   {
+      code: "de-DE",
+      name: "German",
+      region: "Germany",
+      flagCode: "DE",
+      FlagComponent: DE,
+   },
+   {
+      code: "ja-JP",
+      name: "Japanese",
+      region: "Japan",
+      flagCode: "JP",
+      FlagComponent: JP,
+   },
+   {
+      code: "es-ES",
+      name: "Spanish",
+      region: "Spain",
+      flagCode: "ES",
+      FlagComponent: ES,
+   },
+   {
+      code: "it-IT",
+      name: "Italian",
+      region: "Italy",
+      flagCode: "IT",
+      FlagComponent: IT,
+   },
+   {
+      code: "ko-KR",
+      name: "Korean",
+      region: "South Korea",
+      flagCode: "KR",
+      FlagComponent: KR,
+   },
 ];
 
 const DEFAULT_CURRENCIES: StrapiCurrency[] = [
@@ -31,6 +101,18 @@ const DEFAULT_CURRENCIES: StrapiCurrency[] = [
    { name: "Euro", symbol: "€", currencyCode: "EUR" },
    { name: "British Pound", symbol: "£", currencyCode: "GBP" },
 ];
+
+// Map currency codes to their respective flag component
+const CURRENCY_FLAG_MAP: Record<
+   string,
+   React.ComponentType<{ className?: string; style?: CSSProperties }>
+> = {
+   USD: US,
+   EUR: EU,
+   GBP: GB,
+   JPY: JP,
+   KRW: KR,
+};
 
 interface ModalProps {
    show: boolean;
@@ -48,24 +130,35 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
    const { locale, setLocale } = useLocale();
 
    const handleLanguageSelect = (fullCode: string) => {
-      // Converts "en-US" -> "en", "fr-FR" -> "fr", "ja-JP" -> "ja"
-      const strapiLocale = fullCode.split("-")[0];
-      setLocale(strapiLocale);
+      const code = fullCode.split("-")[0];
+
+      const validLocales: SupportedLocale[] = [
+         "en",
+         "es",
+         "fr",
+         "de",
+         "it",
+         "ja",
+         "ko",
+      ];
+
+      if (validLocales.includes(code as SupportedLocale)) {
+         setLocale(code as SupportedLocale);
+      } else {
+         setLocale("en");
+      }
    };
 
-   // 1. Properly type state as an array: StrapiCurrency[]
    const [strapiCurrencies, setStrapiCurrencies] = useState<StrapiCurrency[]>(
       [],
    );
 
-   // 2. Safely filter languages
    const filteredLanguages = LANGUAGES.filter(
       (l) =>
          l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
          l.region.toLowerCase().includes(searchQuery.toLowerCase()),
    );
 
-   // 3. Use Strapi currencies if loaded, otherwise fallback to defaults
    const currencyList =
       strapiCurrencies.length > 0 ? strapiCurrencies : DEFAULT_CURRENCIES;
 
@@ -80,7 +173,6 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
          try {
             const response = await fetch("/api/strapi/currencies");
             const data = await response.json();
-            // Strapi v4/v5 format check
             if (Array.isArray(data?.data)) {
                setStrapiCurrencies(data.data);
             }
@@ -107,7 +199,6 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
          </Modal.Header>
 
          <Modal.Body className="pt-2 px-4">
-            {/* Navigation Tabs and Search */}
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4 gap-3">
                <Nav
                   variant="underline"
@@ -155,20 +246,19 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                </InputGroup>
             </div>
 
-            {/* Content Grids */}
             <Container fluid className="px-0">
                <Row className="g-3">
                   {activeTab === "language"
-                     ? filteredLanguages.map((item: LanguageItem) => {
-                          // Check active selection against current locale
+                     ? filteredLanguages.map((item: EnhancedLanguageItem) => {
                           const isSelected = locale === item.code.split("-")[0];
+                          const Flag = item.FlagComponent;
                           return (
                              <Col xs={6} sm={4} md={3} lg={2} key={item.code}>
                                 <Button
                                    variant="light"
                                    onClick={() =>
                                       handleLanguageSelect(item.code)
-                                   } // <--- Calls our new function
+                                   }
                                    className={`w-100 text-start p-3 rounded-3 border-0 ${
                                       isSelected
                                          ? "bg-light border border-dark border-2"
@@ -178,8 +268,17 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                                    <div className="fw-semibold text-dark small">
                                       {item.name}
                                    </div>
-                                   <div className="text-muted extra-small">
-                                      {item.flag} {item.region}
+                                   <div className="text-muted extra-small d-flex align-items-center gap-1 mt-1">
+                                      <Flag
+                                         style={{
+                                            width: "16px",
+                                            height: "12px",
+                                            borderRadius: "2px",
+                                         }}
+                                      />
+                                      <span>
+                                         {item.flagCode} {item.region}
+                                      </span>
                                    </div>
                                 </Button>
                              </Col>
@@ -188,8 +287,11 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                      : filteredCurrencies.map(
                           (item: StrapiCurrency, index: number) => {
                              const isSelected = currency === item.currencyCode;
+                             // Lookup flag component or default to undefined
+                             const CurrencyFlag =
+                                CURRENCY_FLAG_MAP[item.currencyCode];
+
                              return (
-                                // Unique key combination using currencyCode + index
                                 <Col
                                    xs={6}
                                    sm={4}
@@ -211,8 +313,19 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
                                       <div className="fw-semibold text-dark small">
                                          {item.name}
                                       </div>
-                                      <div className="text-muted extra-small">
-                                         {item.currencyCode} - {item.symbol}
+                                      <div className="text-muted extra-small d-flex align-items-center gap-1 mt-1">
+                                         {CurrencyFlag && (
+                                            <CurrencyFlag
+                                               style={{
+                                                  width: "16px",
+                                                  height: "12px",
+                                                  borderRadius: "2px",
+                                               }}
+                                            />
+                                         )}
+                                         <span>
+                                            {item.currencyCode} - {item.symbol}
+                                         </span>
                                       </div>
                                    </Button>
                                 </Col>
@@ -223,7 +336,6 @@ export default function LanguageCurrencyModal({ show, onHide }: ModalProps) {
             </Container>
          </Modal.Body>
 
-         {/* Footer Switch for Auto-Translation */}
          <Modal.Footer className="border-0 bg-light p-3 d-flex justify-content-between align-items-center rounded-bottom-4">
             <div className="d-flex align-items-center gap-2">
                <i className="bi bi-translate fs-5 text-dark"></i>

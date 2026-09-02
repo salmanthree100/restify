@@ -1,0 +1,28 @@
+{
+   "auth": {
+      "modalTitle": "Login or Sign up",
+      "emailTab": {
+         "title": "Email",
+         "emailLabel": "Email address",
+         "passwordLabel": "Password",
+         "emailPlaceholder": "Enter your email",
+         "passwordPlaceholder": "Enter your password"
+      },
+      "mobileTab": {
+         "title": "Mobile",
+         "countryLabel": "Country/Region",
+         "mobileNumberLabel": "Phone number",
+         "mobileNumberPlaceholder": "Enter your mobile number",
+         "countrySearchPlaceholder": "Search country or code...",
+         "sendingCodeText": "Sending Code...",
+         "codeLabel": "Enter 6-digit Code",
+         "codePlaceholder": "123456",
+         "codeVerifyingText": "Verifying...",
+         "codeLoginText": "Verify & Sign In"
+      },
+      "continueBtnText": "Continue",
+      "socialLoginText": "or continue with",
+      "codeSentText": "Code sent to",
+      "editBtnText": "Edit"
+   }
+}
