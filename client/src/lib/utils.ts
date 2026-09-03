@@ -53,3 +53,13 @@ export function formatE164(countryVal: string, rawNumber: string) {
 
    return `+${countryDigits}${phoneDigits}`;
 }
+
+// date formater function for date picker
+export function formatLocalDate(date: Date): string {
+   const year = date.getFullYear();
+   // getMonth() is 0-indexed, so add 1 and pad with leading zero
+   const month = String(date.getMonth() + 1).padStart(2, "0");
+   const day = String(date.getDate()).padStart(2, "0");
+
+   return `${year}-${month}-${day}`;
+}

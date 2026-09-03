@@ -1,129 +1,194 @@
 {
-  "kind": "collectionType",
-  "collectionName": "properties",
-  "info": {
-    "singularName": "property",
-    "pluralName": "properties",
-    "displayName": "Property"
-  },
-  "options": {
-    "draftAndPublish": true
-  },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
-  "attributes": {
-    "title": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
+   "kind": "collectionType",
+   "collectionName": "properties",
+   "info": {
+      "singularName": "property",
+      "pluralName": "properties",
+      "displayName": "Property"
+   },
+   "options": {
+      "draftAndPublish": true
+   },
+   "pluginOptions": {
+      "i18n": {
+         "localized": true
       }
-    },
-    "slug": {
-      "type": "uid",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
+   },
+   "attributes": {
+      "title": {
+         "type": "string",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
       },
-      "targetField": "title"
-    },
-    "images": {
-      "type": "media",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
+      "slug": {
+         "type": "uid",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         },
+         "targetField": "title"
       },
-      "multiple": true,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "address": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "rating": {
-      "type": "decimal",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "reviewsCount": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "bedrooms": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "bathrooms": {
-      "type": "integer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "pricePerNight": {
-      "type": "decimal",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "isTrending": {
-      "type": "boolean",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
+      "images": {
+         "type": "media",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         },
+         "multiple": true,
+         "allowedTypes": ["images"]
       },
-      "default": false
-    },
-    "bedroomsText": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
+      "address": {
+         "type": "string",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "rating": {
+         "type": "decimal",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "reviewsCount": {
+         "type": "integer",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "bedrooms": {
+         "type": "integer",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "bathrooms": {
+         "type": "integer",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "pricePerNight": {
+         "type": "decimal",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "isTrending": {
+         "type": "boolean",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         },
+         "default": false
+      },
+      "bedroomsText": {
+         "type": "string",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "bathroomsText": {
+         "type": "string",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "pricePerNightText": {
+         "type": "string",
+         "pluginOptions": {
+            "i18n": {
+               "localized": true
+            }
+         }
+      },
+      "latitude": {
+         "type": "decimal",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         }
+      },
+      "longitude": {
+         "type": "decimal",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         }
+      },
+      "maxGuests": {
+         "type": "integer",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         },
+         "default": 1
+      },
+      "instantBook": {
+         "type": "boolean",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         },
+         "default": false
+      },
+      "selfCheckIn": {
+         "type": "boolean",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         },
+         "default": false
+      },
+      "hasWasher": {
+         "type": "boolean",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         },
+         "default": false
+      },
+      "hasHotTub": {
+         "type": "boolean",
+         "pluginOptions": {
+            "i18n": {
+               "localized": false
+            }
+         },
+         "default": false
+      },
+      "bookings": {
+         "type": "relation",
+         "relation": "oneToMany",
+         "target": "api::booking.booking",
+         "mappedBy": "property"
       }
-    },
-    "bathroomsText": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "pricePerNightText": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    }
-  }
+   }
 }

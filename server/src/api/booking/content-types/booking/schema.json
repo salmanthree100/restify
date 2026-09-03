@@ -1,0 +1,46 @@
+{
+   "kind": "collectionType",
+   "collectionName": "bookings",
+   "info": {
+      "singularName": "booking",
+      "pluralName": "bookings",
+      "displayName": "Booking",
+      "description": "Property reservations for date availability filtering"
+   },
+   "options": {
+      "draftAndPublish": false
+   },
+   "pluginOptions": {
+      "i18n": {
+         "localized": false
+      }
+   },
+   "attributes": {
+      "checkIn": {
+         "type": "date",
+         "required": true
+      },
+      "checkOut": {
+         "type": "date",
+         "required": true
+      },
+      "status": {
+         "type": "enumeration",
+         "enum": ["pending", "confirmed", "cancelled"],
+         "default": "confirmed",
+         "required": true
+      },
+      "totalPrice": {
+         "type": "decimal"
+      },
+      "guestsCount": {
+         "type": "integer"
+      },
+      "property": {
+         "type": "relation",
+         "relation": "manyToOne",
+         "target": "api::property.property",
+         "inversedBy": "bookings"
+      }
+   }
+}

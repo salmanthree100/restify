@@ -19,6 +19,8 @@ import DestinationPopover from "@/app/components/common/DestinationPopover";
 import GuestPopover, {
    GuestCounts,
 } from "@/app/components/common/GuestPopover";
+import { useRouter } from "next/navigation"; // Use App Router hook
+import { formatLocalDate } from "@/lib/utils";
 
 interface SelectedDestinationData {
    title: string;
@@ -48,6 +50,9 @@ const HeroSection = () => {
       infants: 0,
       pets: 0,
    });
+
+   // router hook for sending search details to property search page
+   const router = useRouter();
 
    const handleSelectDestination = (dest: SelectedDestinationData) => {
       // 1. Fill input text with the selected title
@@ -135,6 +140,48 @@ const HeroSection = () => {
       if (pets > 0) parts.push(`${pets} ${pets === 1 ? "pet" : "pets"}`);
 
       return parts.join(", ");
+   };
+
+   // function for sending search data to property page
+   const handleSearch = () => {
+      const queryParams = new URLSearchParams();
+
+      // 1. Destination
+      if (selectedDestination?.title) {
+         queryParams.set("destination", selectedDestination.title);
+         if (selectedDestination.lat && selectedDestination.lng) {
+            queryParams.set("lat", selectedDestination.lat.toString());
+            queryParams.set("lng", selectedDestination.lng.toString());
+         }
+      } else if (destinationInput.trim()) {
+         queryParams.set("destination", destinationInput.trim());
+      }
+
+      // 2. Dates (Format as local format date YYYY-MM-DD strings for clean backend filtering)
+      if (dates?.from) {
+         queryParams.set("checkIn", formatLocalDate(dates.from));
+      }
+      if (dates?.to) {
+         queryParams.set("checkOut", formatLocalDate(dates.to));
+      }
+
+      // 3. Guests
+      const totalGuests =
+         (guestCounts.adults || 0) + (guestCounts.children || 0);
+      if (totalGuests > 0) {
+         queryParams.set("guests", totalGuests.toString());
+      }
+      if (guestCounts.adults > 0)
+         queryParams.set("adults", guestCounts.adults.toString());
+      if (guestCounts.children > 0)
+         queryParams.set("children", guestCounts.children.toString());
+      if (guestCounts.infants > 0)
+         queryParams.set("infants", guestCounts.infants.toString());
+      if (guestCounts.pets > 0)
+         queryParams.set("pets", guestCounts.pets.toString());
+
+      // Navigate to property list page with parameters
+      router.push(`/properties?${queryParams.toString()}`);
    };
 
    return (
@@ -312,7 +359,10 @@ const HeroSection = () => {
                         </Overlay>
 
                         {/* Search Action Button */}
-                        <button className="btn btn-dark rounded-circle p-3 d-flex align-items-center justify-content-center">
+                        <button
+                           onClick={handleSearch}
+                           className="btn btn-dark rounded-circle p-3 d-flex align-items-center justify-content-center"
+                        >
                            <FiSearch color="#fff" size={24} />
                         </button>
                      </div>
