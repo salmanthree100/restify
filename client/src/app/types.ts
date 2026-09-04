@@ -83,3 +83,30 @@ export interface FooterData {
    socialLinks: SocialLink[];
    copyrightText: string;
 }
+
+export interface StrapiImage {
+   id: number;
+   documentId: string;
+   url: string;
+   alternativeText: string | null;
+   width: number;
+   height: number;
+}
+
+export interface Property {
+   id: number;
+   documentId?: string;
+   title: string;
+   address: string;
+   rating: number;
+   reviewsCount: number;
+   bedrooms: number;
+   bathrooms: number;
+   pricePerNight: number;
+   isTrending?: boolean;
+   maxGuests?: number;
+   images?: StrapiImage[];
+   bedroomsText: string;
+   bathroomsText: string;
+   pricePerNightText: string;
+}
