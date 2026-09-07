@@ -124,7 +124,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             </Card.Text>
 
             {/* Features Row */}
-            <div className="d-flex align-items-center justify-content-between border-top border-bottom py-2 mb-3 text-muted small">
+            <div className="d-flex flex-wrap align-items-center justify-content-between border-top border-bottom py-2 mb-3 text-muted small">
                <div className="d-flex align-items-center gap-1">
                   <FaBed size={15} className="text-secondary" />
                   <span>

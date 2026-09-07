@@ -19,6 +19,8 @@ export default function PropertiesPage() {
          // Build query string with current locale
          const queryString = buildPropertyQuery({
             destination: searchParams.get("destination") || undefined,
+            lat: searchParams.get("lat") || undefined, // <--- Read latitude from URL
+            lng: searchParams.get("lng") || undefined, // <--- Read longitude from URL
             guests: searchParams.get("guests") || undefined,
             minPrice: searchParams.get("minPrice") || undefined,
             maxPrice: searchParams.get("maxPrice") || undefined,

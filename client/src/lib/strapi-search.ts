@@ -1,19 +1,20 @@
+// lib/strapi-search.ts
 import qs from "qs";
+import { getBoundingBox } from "./geo-utils";
 
 export interface SearchFilterParams {
    destination?: string;
+   lat?: string | number;
+   lng?: string | number;
+   radius?: number; // Radius in kilometers (default 25km)
    checkIn?: string;
    checkOut?: string;
    guests?: string | number;
    minPrice?: string | number;
    maxPrice?: string | number;
-   selfCheckIn?: boolean;
-   instantBook?: boolean;
-   hasWasher?: boolean;
-   hasHotTub?: boolean;
    page?: string | number;
    pageSize?: number;
-   locale?: string; // <--- Add locale support here
+   locale?: string;
 }
 
 type FilterCondition = Record<string, unknown>;
@@ -22,9 +23,27 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
    const andArray: FilterCondition[] = [];
    const baseFilters: FilterCondition = {};
 
-   // 1. Destination Filter
-   // inside buildPropertyQuery in strapi-search.ts
-   if (params.destination && params.destination.trim() !== "") {
+   // 1. GEOGRAPHIC COORD FILTERING (Prioritized over address string)
+   if (
+      params.lat &&
+      params.lng &&
+      !isNaN(Number(params.lat)) &&
+      !isNaN(Number(params.lng))
+   ) {
+      const latNum = Number(params.lat);
+      const lngNum = Number(params.lng);
+      const radius = params.radius || 25; // 25km radius
+
+      const bbox = getBoundingBox(latNum, lngNum, radius);
+
+      // Filter properties within the latitude/longitude boundary
+      andArray.push(
+         { latitude: { $between: [bbox.minLat, bbox.maxLat] } },
+         { longitude: { $between: [bbox.minLng, bbox.maxLng] } },
+      );
+   }
+   // Fallback to Address string matching if coordinates are not provided
+   else if (params.destination && params.destination.trim() !== "") {
       const cleanDestination = params.destination.split(",")[0].trim();
       if (cleanDestination) {
          andArray.push({
@@ -36,7 +55,7 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
       }
    }
 
-   // 2. Guests Filter
+   // 2. Guest Filter
    if (
       params.guests &&
       !isNaN(Number(params.guests)) &&
@@ -45,7 +64,7 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
       baseFilters.maxGuests = { $gte: Number(params.guests) };
    }
 
-   // 3. Price Range Filter
+   // 3. Price Filter
    if (params.minPrice || params.maxPrice) {
       const priceFilter: Record<string, number> = {};
       if (params.minPrice && !isNaN(Number(params.minPrice))) {
@@ -59,17 +78,11 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
       }
    }
 
-   // 4. Feature Toggles
-   if (params.selfCheckIn) {
-      baseFilters.selfCheckIn = { $eq: true };
-   }
-
    const filters: FilterCondition = { ...baseFilters };
    if (andArray.length > 0) {
       filters.$and = andArray;
    }
 
-   // Root query object
    const queryPayload: Record<string, unknown> = {
       populate: "images",
       pagination: {
@@ -79,7 +92,6 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
       sort: ["createdAt:desc"],
    };
 
-   // Add locale to query if provided (e.g., 'en', 'es', 'fr', or 'all')
    if (params.locale) {
       queryPayload.locale = params.locale;
    }
@@ -87,9 +99,6 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
    if (Object.keys(filters).length > 0) {
       queryPayload.filters = filters;
    }
-
-   if (params.checkIn) queryPayload.checkIn = params.checkIn;
-   if (params.checkOut) queryPayload.checkOut = params.checkOut;
 
    return qs.stringify(queryPayload, { encodeValuesOnly: true });
 }
