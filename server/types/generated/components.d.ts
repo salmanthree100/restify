@@ -179,6 +179,29 @@ export interface ElementsGuestStory extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsPropertyAmenities extends Struct.ComponentSchema {
+  collectionName: 'components_elements_property_amenities';
+  info: {
+    displayName: 'Property Amenities';
+  };
+  attributes: {
+    icon: Schema.Attribute.Media<'images'>;
+    key: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsPropertyTypes extends Struct.ComponentSchema {
+  collectionName: 'components_elements_property_types';
+  info: {
+    displayName: 'Property Types';
+  };
+  attributes: {
+    key: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsServiceFeature extends Struct.ComponentSchema {
   collectionName: 'components_elements_service_features';
   info: {
@@ -287,6 +310,8 @@ declare module '@strapi/strapi' {
       'elements.category-card': ElementsCategoryCard;
       'elements.feature-item': ElementsFeatureItem;
       'elements.guest-story': ElementsGuestStory;
+      'elements.property-amenities': ElementsPropertyAmenities;
+      'elements.property-types': ElementsPropertyTypes;
       'elements.service-feature': ElementsServiceFeature;
       'elements.social-link': ElementsSocialLink;
       'elements.stat-badge': ElementsStatBadge;

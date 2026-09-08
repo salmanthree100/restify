@@ -39,8 +39,8 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
 
    return (
       <section style={{ margin: "100px 0" }}>
-         <Container fluid="xl" className="py-4">
-            <div className="container-fluid">
+         <Container fluid className="px-3">
+            <div>
                {/* View Mode Toggle Header */}
                <div className="d-flex justify-content-between align-items-center mb-4">
                   <h5 className="m-0 fw-bold">

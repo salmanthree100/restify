@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_elements_property_types",
+  "info": {
+    "displayName": "Property Types"
+  },
+  "options": {},
+  "attributes": {
+    "key": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

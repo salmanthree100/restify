@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_elements_property_amenities",
+  "info": {
+    "displayName": "Property Amenities"
+  },
+  "options": {},
+  "attributes": {
+    "key": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  },
+  "config": {}
+}
