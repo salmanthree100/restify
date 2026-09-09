@@ -83,6 +83,7 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
    }
 
    // 4. Modal Amenity Toggles (Boolean filters)
+   // 1. Amenity Booleans - Only append filter if explicitly true
    if (params.instantBook === true || params.instantBook === "true") {
       baseFilters.instantBook = { $eq: true };
    }
@@ -96,7 +97,7 @@ export function buildPropertyQuery(params: SearchFilterParams): string {
       baseFilters.hasHotTub = { $eq: true };
    }
 
-   // 5. Place Type Filter (e.g. Any, Entire Home, Room)
+   // 2. Property Type - Only filter if selected and not "any"
    if (params.propertyType && params.propertyType !== "any") {
       baseFilters.propertyType = { $eq: params.propertyType };
    }

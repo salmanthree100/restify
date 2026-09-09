@@ -90,6 +90,22 @@
           "localized": true
         }
       }
+    },
+    "clearAllLink": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "showPlacesBtn": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

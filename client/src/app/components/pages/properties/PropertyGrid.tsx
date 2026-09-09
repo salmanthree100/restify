@@ -5,6 +5,9 @@ import dynamic from "next/dynamic";
 import { Container } from "react-bootstrap";
 import { PropertyCard } from "./PropertyCard";
 import { Property } from "@/app/types";
+import SearchFilterModal from "@/app/components/common/SearchFilterModal";
+import { useRouter } from "next/navigation";
+import { IoFilterSharp } from "react-icons/io5";
 
 // Dynamically import PropertyMap with SSR disabled
 const PropertyMap = dynamic(() => import("./PropertyMap"), {
@@ -25,15 +28,25 @@ interface PropertyGridProps {
 
 export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
    const [showMap, setShowMap] = useState(true);
+   const [showFilter, setShowFilter] = useState(false);
+   const handleClose = () => setShowFilter(false);
+   const router = useRouter();
 
    if (!properties || properties.length === 0) {
       return (
-         <Container className="py-5 text-center">
-            <h5 className="fw-semibold text-secondary">No properties found</h5>
-            <p className="text-muted small">
-               Try adjusting your destination or filter options.
+         <div className="text-center py-5">
+            <h4 className="fw-bold">No places found</h4>
+            <p className="text-muted">
+               Try adjusting or clearing some of your filter criteria (like
+               price range or amenities).
             </p>
-         </Container>
+            <button
+               className="btn btn-outline-dark rounded-pill px-4 mt-2"
+               onClick={() => router.push("/properties")}
+            >
+               Clear all filters
+            </button>
+         </div>
       );
    }
 
@@ -42,16 +55,37 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
          <Container fluid className="px-3">
             <div>
                {/* View Mode Toggle Header */}
-               <div className="d-flex justify-content-between align-items-center mb-4">
-                  <h5 className="m-0 fw-bold">
-                     {properties.length} Places to Stay
-                  </h5>
-                  <button
-                     className="btn btn-outline-dark btn-sm rounded-pill px-3"
-                     onClick={() => setShowMap(!showMap)}
+               <div className="row d-flex align-items-center justify-content-between mb-4">
+                  <div
+                     className={`d-flex align-items-center justify-content-between ${showMap ? "col-lg-7 col-xl-8" : "col-9"}`}
                   >
-                     {showMap ? "Hide Map" : "Show Map View"}
-                  </button>
+                     <div>
+                        <h5 className="m-0 fw-bold">
+                           {properties.length} Places to Stay
+                        </h5>
+                     </div>
+                     <div>
+                        <button
+                           className="btn btn-outline-dark btn-sm rounded-3 px-3"
+                           onClick={() => setShowFilter(!showFilter)}
+                        >
+                           <span>
+                              <IoFilterSharp className="me-2" />
+                              Filters
+                           </span>
+                        </button>
+                     </div>
+                  </div>
+                  <div
+                     className={`${showMap ? "col-lg-5 col-xl-4 text-end" : "col-3 text-end"}`}
+                  >
+                     <button
+                        className="btn btn-outline-dark btn-sm rounded-3 px-3"
+                        onClick={() => setShowMap(!showMap)}
+                     >
+                        {showMap ? "Hide Map" : "Show Map View"}
+                     </button>
+                  </div>
                </div>
 
                {showMap ? (
@@ -87,6 +121,12 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                         </div>
                      ))}
                   </div>
+               )}
+               {showFilter && (
+                  <SearchFilterModal
+                     isOpen={showFilter}
+                     onClose={handleClose}
+                  />
                )}
             </div>
          </Container>

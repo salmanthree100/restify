@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { buildPropertyQuery } from "@/lib/strapi-search";
-import { PropertyGrid } from "../components/pages/properties/PropertyGrid";
+import { PropertyGrid } from "@/app/components/pages/properties/PropertyGrid";
 import { useLocale } from "@/context/LocaleContext";
 
 export default function PropertiesPage() {

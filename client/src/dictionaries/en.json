@@ -24,5 +24,12 @@
       "socialLoginText": "or continue with",
       "codeSentText": "Code sent to",
       "editBtnText": "Edit"
+   },
+   "propertyGrid": {
+      "placesToStay": "Places to Stay",
+      "noResultText": "Keine Orte gefunden",
+      "noResultMessage": "Try adjusting or clearing some of your filter criteria (like price range or amenities).",
+      "clearAllFilters": "Clear all filters",
+      "filterBtn": "Filters"
    }
 }

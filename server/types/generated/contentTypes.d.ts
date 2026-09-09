@@ -630,6 +630,12 @@ export interface ApiFilterModalConfigFilterModalConfig
           localized: true;
         };
       }>;
+    clearAllLink: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -687,6 +693,12 @@ export interface ApiFilterModalConfigFilterModalConfig
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    showPlacesBtn: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

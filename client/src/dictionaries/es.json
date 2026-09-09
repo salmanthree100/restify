@@ -24,5 +24,12 @@
       "socialLoginText": "o continuar con",
       "codeSentText": "Código enviado a",
       "editBtnText": "Editar"
+   },
+   "propertyGrid": {
+      "placesToStay": "Lugares para hospedarse",
+      "noResultText": "No se encontraron lugares",
+      "noResultMessage": "Intenta ajustar o borrar algunos de tus criterios de búsqueda (como el rango de precios o los servicios).",
+      "clearAllFilters": "Borrar todos los filtros",
+      "filterBtn": "Filtros"
    }
 }

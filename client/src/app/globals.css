@@ -8,6 +8,8 @@
   --text-700: #606060;
   --text-950: #0C0C0C;
   --footericonbg: #404040;
+  --modal-backdrop: rgba(134, 134, 134, 0.6);
+  --form-range: #ADADAD;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -206,6 +208,16 @@ a {
 .footer-social-links {
   background-color: var(--footericonbg) !important;
 }
+
+.modal-backdrop {
+  background-color: var(--modal-backdrop) !important;
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: var(--form-range) !important;
+}
+
+
 
 @media (prefers-color-scheme: dark) {
   html {

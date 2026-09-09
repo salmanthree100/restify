@@ -24,5 +24,12 @@
       "socialLoginText": "oder weiter mit",
       "codeSentText": "Code gesendet an",
       "editBtnText": "Bearbeiten"
+   },
+   "propertyGrid": {
+      "placesToStay": "Unterkünfte",
+      "noResultText": "Keine Orte gefunden",
+      "noResultMessage": "Versuchen Sie, einige Ihrer Filterkriterien (wie Preisspanne oder Ausstattung) anzupassen oder zu löschen.",
+      "clearAllFilters": "Alle Filter löschen",
+      "filterBtn": "Filter"
    }
 }

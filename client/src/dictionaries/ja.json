@@ -24,5 +24,12 @@
       "socialLoginText": "または次で続行",
       "codeSentText": "送信先コード:",
       "editBtnText": "編集"
+   },
+   "propertyGrid": {
+      "placesToStay": "宿泊施設",
+      "noResultText": "該当する宿泊施設が見つかりません",
+      "noResultMessage": "検索条件（価格帯や設備など）を変更または解除してみてください。",
+      "clearAllFilters": "すべてのフィルターをクリア",
+      "filterBtn": "フィルター"
    }
 }
