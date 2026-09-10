@@ -30,6 +30,13 @@
       "noResultText": "該当する宿泊施設が見つかりません",
       "noResultMessage": "検索条件（価格帯や設備など）を変更または解除してみてください。",
       "clearAllFilters": "すべてのフィルターをクリア",
-      "filterBtn": "フィルター"
+      "filterBtn": "フィルター",
+      "hideMap": "地図を非表示にする",
+      "showMap": "地図を表示"
+   },
+   "propertyCard": {
+      "trending": "トレンド",
+      "guests": "ゲスト",
+      "viewBtn": "詳細を見る"
    }
 }

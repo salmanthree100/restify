@@ -30,6 +30,13 @@
       "noResultText": "검색 결과가 없습니다",
       "noResultMessage": "필터 조건(가격대 또는 편의시설 등)을 조정하거나 모두 지워보세요.",
       "clearAllFilters": "모든 필터 초기화",
-      "filterBtn": "필터"
+      "filterBtn": "필터",
+      "hideMap": "지도 숨기기",
+      "showMap": "지도 보기"
+   },
+   "propertyCard": {
+      "trending": "인기",
+      "guests": "게스트",
+      "viewBtn": "상세 보기"
    }
 }

@@ -30,6 +30,13 @@
       "noResultText": "Nessun luogo trovato",
       "noResultMessage": "Prova a modificare o rimuovere alcuni dei criteri di ricerca (come la fascia di prezzo o i servizi).",
       "clearAllFilters": "Rimuovi tutti i filtri",
-      "filterBtn": "Filtri"
+      "filterBtn": "Filtri",
+      "hideMap": "Mappa dettagliata",
+      "showMap": "Mostra mappa"
+   },
+   "propertyCard": {
+      "trending": "Di tendenza",
+      "guests": "Ospiti",
+      "viewBtn": "Visualizza dettagli"
    }
 }

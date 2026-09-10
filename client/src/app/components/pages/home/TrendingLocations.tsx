@@ -219,7 +219,7 @@ function LocationCard({ item }: { item: PropertyData }) {
                <div className="d-flex justify-content-between align-items-start mb-1">
                   <h3 className="card-title fw-semibold fs-6 text-dark mb-0 text-truncate pe-2">
                      <Link
-                        href={`/properties/${item.slug}`}
+                        href={`/properties/${item.documentId || item.id}`}
                         className="text-decoration-none text-dark"
                      >
                         {item.title}

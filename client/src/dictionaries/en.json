@@ -27,9 +27,16 @@
    },
    "propertyGrid": {
       "placesToStay": "Places to Stay",
-      "noResultText": "Keine Orte gefunden",
+      "noResultText": "No places found",
       "noResultMessage": "Try adjusting or clearing some of your filter criteria (like price range or amenities).",
       "clearAllFilters": "Clear all filters",
-      "filterBtn": "Filters"
+      "filterBtn": "Filters",
+      "hideMap": "Hide Map",
+      "showMap": "Show Map"
+   },
+   "propertyCard": {
+      "trending": "Trending",
+      "guests": "Guests",
+      "viewBtn": "View Details"
    }
 }

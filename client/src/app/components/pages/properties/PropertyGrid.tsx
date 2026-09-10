@@ -8,6 +8,7 @@ import { Property } from "@/app/types";
 import SearchFilterModal from "@/app/components/common/SearchFilterModal";
 import { useRouter } from "next/navigation";
 import { IoFilterSharp } from "react-icons/io5";
+import { useLocale } from "@/context/LocaleContext";
 
 // Dynamically import PropertyMap with SSR disabled
 const PropertyMap = dynamic(() => import("./PropertyMap"), {
@@ -31,20 +32,18 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
    const [showFilter, setShowFilter] = useState(false);
    const handleClose = () => setShowFilter(false);
    const router = useRouter();
+   const { t } = useLocale();
 
    if (!properties || properties.length === 0) {
       return (
-         <div className="text-center py-5">
-            <h4 className="fw-bold">No places found</h4>
-            <p className="text-muted">
-               Try adjusting or clearing some of your filter criteria (like
-               price range or amenities).
-            </p>
+         <div className="text-center" style={{ margin: "100px 0" }}>
+            <h4 className="fw-bold">{t.propertyGrid.noResultText}</h4>
+            <p className="text-muted">{t.propertyGrid.noResultMessage}</p>
             <button
                className="btn btn-outline-dark rounded-pill px-4 mt-2"
                onClick={() => router.push("/properties")}
             >
-               Clear all filters
+               {t.propertyGrid.clearAllFilters}
             </button>
          </div>
       );
@@ -61,7 +60,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                   >
                      <div>
                         <h5 className="m-0 fw-bold">
-                           {properties.length} Places to Stay
+                           {properties.length} {t.propertyGrid.placesToStay}
                         </h5>
                      </div>
                      <div>
@@ -71,7 +70,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                         >
                            <span>
                               <IoFilterSharp className="me-2" />
-                              Filters
+                              {t.propertyGrid.filterBtn}
                            </span>
                         </button>
                      </div>
@@ -83,7 +82,9 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                         className="btn btn-outline-dark btn-sm rounded-3 px-3"
                         onClick={() => setShowMap(!showMap)}
                      >
-                        {showMap ? "Hide Map" : "Show Map View"}
+                        {showMap
+                           ? t.propertyGrid.hideMap
+                           : t.propertyGrid.showMap}
                      </button>
                   </div>
                </div>

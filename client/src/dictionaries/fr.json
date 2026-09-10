@@ -30,6 +30,13 @@
       "noResultText": "Aucun endroit trouvé",
       "noResultMessage": "Essayez d'ajuster ou de supprimer certains de vos critères de recherche (comme la fourchette de prix ou les équipements).",
       "clearAllFilters": "Effacer tous les filtres",
-      "filterBtn": "Filtres"
+      "filterBtn": "Filtres",
+      "hideMap": "Masquer la carte",
+      "showMap": "Afficher la carte"
+   },
+   "propertyCard": {
+      "trending": "Tendance",
+      "guests": "Voyageurs",
+      "viewBtn": "Voir les détails"
    }
 }

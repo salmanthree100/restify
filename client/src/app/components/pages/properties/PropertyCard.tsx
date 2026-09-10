@@ -15,6 +15,7 @@ import { Property } from "@/app/types";
 import Image from "next/image";
 import { getStrapiMedia } from "@/lib/utils";
 import { useCurrency } from "@/context/CurrencyContext";
+import { useLocale } from "@/context/LocaleContext";
 
 interface PropertyCardProps {
    property: Property;
@@ -23,6 +24,7 @@ interface PropertyCardProps {
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
    const [isLiked, setIsLiked] = useState(false);
    const { formatPrice } = useCurrency(); // Accessing formatPrice from Currency Context
+   const { t } = useLocale();
 
    const images =
       property.images && property.images.length > 0
@@ -64,7 +66,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                   bg="dark"
                   className="position-absolute top-0 start-0 m-3 z-3 px-3 py-2 rounded-pill fw-semibold shadow-sm"
                >
-                  Trending
+                  {t.propertyCard.trending}
                </Badge>
             )}
 
@@ -140,7 +142,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                {property.maxGuests && (
                   <div className="d-flex align-items-center gap-1">
                      <FaUserGroup size={14} className="text-secondary" />
-                     <span>{property.maxGuests} Guests</span>
+                     <span>
+                        {property.maxGuests} {t.propertyCard.guests}
+                     </span>
                   </div>
                )}
             </div>
@@ -166,7 +170,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                      size="sm"
                      className="rounded-3 px-3 fw-semibold"
                   >
-                     View Details
+                     {t.propertyCard.viewBtn}
                   </Button>
                </Link>
             </div>

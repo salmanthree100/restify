@@ -1,4 +1,3 @@
-// src/components/Header.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -16,6 +15,8 @@ import styles from "./Header.module.css";
 import { MdOutlineMenu } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { CiGlobe } from "react-icons/ci";
+import { usePathname } from "next/navigation";
+import PropertiesHeader from "./PropertiesHeader";
 
 export default function Header() {
    const [showLangModal, setShowLangModal] = useState(false);
@@ -51,6 +52,16 @@ export default function Header() {
       };
       fetchHeader();
    }, [query]);
+
+   // check if the page is properties page
+   const pathname = usePathname();
+
+   // Check if current route is /properties or /properties/[id]
+   const isPropertiesPage = pathname.startsWith("/properties");
+
+   if (isPropertiesPage) {
+      return <PropertiesHeader />;
+   }
 
    return (
       <section>

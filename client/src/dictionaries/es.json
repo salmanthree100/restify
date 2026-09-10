@@ -30,6 +30,13 @@
       "noResultText": "No se encontraron lugares",
       "noResultMessage": "Intenta ajustar o borrar algunos de tus criterios de búsqueda (como el rango de precios o los servicios).",
       "clearAllFilters": "Borrar todos los filtros",
-      "filterBtn": "Filtros"
+      "filterBtn": "Filtros",
+      "hideMap": "Ocultar mapa",
+      "showMap": "Mostrar mapa"
+   },
+   "propertyCard": {
+      "trending": "Tendencia",
+      "guests": "Huéspedes",
+      "viewBtn": "Ver detalles"
    }
 }
