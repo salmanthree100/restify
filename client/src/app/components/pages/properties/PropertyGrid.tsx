@@ -55,15 +55,15 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
             <div>
                {/* View Mode Toggle Header */}
                <div className="row d-flex align-items-center justify-content-between mb-4">
-                  <div
-                     className={`d-flex align-items-center justify-content-between ${showMap ? "col-lg-7 col-xl-8" : "col-9"}`}
-                  >
+                  <div className="d-flex align-items-center justify-content-between col-lg-7 col-xl-8">
                      <div>
                         <h5 className="m-0 fw-bold">
                            {properties.length} {t.propertyGrid.placesToStay}
                         </h5>
                      </div>
-                     <div>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-end col-lg-5 col-xl-4">
+                     <div className="me-2">
                         <button
                            className="btn btn-outline-dark btn-sm rounded-3 px-3"
                            onClick={() => setShowFilter(!showFilter)}
@@ -74,18 +74,16 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                            </span>
                         </button>
                      </div>
-                  </div>
-                  <div
-                     className={`${showMap ? "col-lg-5 col-xl-4 text-end" : "col-3 text-end"}`}
-                  >
-                     <button
-                        className="btn btn-outline-dark btn-sm rounded-3 px-3"
-                        onClick={() => setShowMap(!showMap)}
-                     >
-                        {showMap
-                           ? t.propertyGrid.hideMap
-                           : t.propertyGrid.showMap}
-                     </button>
+                     <div>
+                        <button
+                           className="btn btn-outline-dark btn-sm rounded-3 px-3"
+                           onClick={() => setShowMap(!showMap)}
+                        >
+                           {showMap
+                              ? t.propertyGrid.hideMap
+                              : t.propertyGrid.showMap}
+                        </button>
+                     </div>
                   </div>
                </div>
 
