@@ -18,7 +18,7 @@ export interface SearchFilterParams {
    hasWasher?: boolean | string;
    hasHotTub?: boolean | string;
    propertyType?: string; // 'entire_home' | 'room' | 'any'
-
+   // pagination and locale
    page?: string | number;
    pageSize?: number;
    locale?: string;

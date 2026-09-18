@@ -217,7 +217,35 @@ a {
   background-color: var(--form-range) !important;
 }
 
+/* pagination default styles override */
+.pagination {
+  --bs-pagination-padding-x: 0.87rem !important;
+  --bs-pagination-color: var(--foreground) !important;
+  --bs-pagination-bg: var(--background) !important;
+  --bs-pagination-border-width: 0 !important;
+  --bs-pagination-border-color: var(--foreground) !important;
+  --bs-pagination-border-radius: 50% !important;
+  --bs-pagination-hover-color: var(--primary-200) !important;
+  --bs-pagination-hover-border-color: var(--bs-border-color);
+  --bs-pagination-focus-color: var(--foreground) !important;
+  --bs-pagination-focus-bg: var(--background) !important;
+  --bs-pagination-focus-box-shadow: 0 0 0 .25rem var(--background) !important;
+  --bs-pagination-active-color: var(--foreground) !important;
+  --bs-pagination-active-bg: var(--background) !important;
+  --bs-pagination-active-border-color: var(--foreground) !important;
+  --bs-pagination-disabled-color: var(--bs-secondary-color);
+  --bs-pagination-disabled-bg: var(--background) !important;
+  --bs-pagination-disabled-border-color: 0 !important;
+}
 
+.page-item.active>.page-link {
+  border: 1px solid #0C0C0C !important;
+  border-radius: 50% !important;
+}
+
+.page-item {
+  margin: 0 5px !important;
+}
 
 @media (prefers-color-scheme: dark) {
   html {

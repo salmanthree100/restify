@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Navbar, Container, Dropdown, Overlay } from "react-bootstrap";
+import { Navbar, Container, Dropdown } from "react-bootstrap";
 import { MdOutlineMenu } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { CiGlobe, CiSearch } from "react-icons/ci";
@@ -44,14 +44,14 @@ export default function ExpandableSearchHeader() {
 
    // References
    const headerRef = useRef<HTMLDivElement>(null);
-   const searchBarRef = useRef<HTMLDivElement>(null);
+   const datePickerRef = useRef<HTMLDivElement>(null);
 
    // Extract URL Parameters for state initialization
    const paramDestination = searchParams.get("destination") || "";
    const paramCheckIn = searchParams.get("checkIn");
    const paramCheckOut = searchParams.get("checkOut");
 
-   // Search State initialized directly from searchParams (No useEffect sync needed)
+   // Search State
    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
    const [destinationInput, setDestinationInput] = useState(paramDestination);
    const [selectedDestination, setSelectedDestination] =
@@ -134,12 +134,15 @@ export default function ExpandableSearchHeader() {
       return parts.join(", ");
    };
 
-   // Close expanded search bar when clicking outside
+   // Close expanded search bar when clicking outside header AND date picker popover
    useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
+         const target = event.target as Node;
          if (
             headerRef.current &&
-            !headerRef.current.contains(event.target as Node)
+            !headerRef.current.contains(target) &&
+            datePickerRef.current &&
+            !datePickerRef.current.contains(target)
          ) {
             setIsExpanded(false);
             setShowDatePicker(false);
@@ -166,7 +169,7 @@ export default function ExpandableSearchHeader() {
       );
    };
 
-   // Search handler function matching HeroSection implementation
+   // Search handler function
    const handleSearch = () => {
       const queryParams = new URLSearchParams();
 
@@ -205,6 +208,7 @@ export default function ExpandableSearchHeader() {
          queryParams.set("pets", guestCounts.pets.toString());
 
       setIsExpanded(false);
+      setShowDatePicker(false);
       router.push(`/properties?${queryParams.toString()}`);
    };
 
@@ -212,7 +216,8 @@ export default function ExpandableSearchHeader() {
       <>
          <header
             ref={headerRef}
-            className="bg-white border-bottom sticky-top shadow-sm transition-all"
+            className="bg-white border-bottom sticky-top shadow-sm transition-all position-relative"
+            style={{ zIndex: 1030 }} // Ensures the entire header overlays map components
          >
             <Navbar bg="white" expand="lg" className="py-2">
                <Container
@@ -231,7 +236,7 @@ export default function ExpandableSearchHeader() {
                      />
                   </Navbar.Brand>
 
-                  {/* 2. Compact Search Pill (Visible when NOT expanded) */}
+                  {/* 2. Compact Search Pill */}
                   {!isExpanded && (
                      <div
                         onClick={() => setIsExpanded(true)}
@@ -329,14 +334,15 @@ export default function ExpandableSearchHeader() {
                      className="d-flex justify-content-center my-2 position-relative w-100 mx-auto"
                      style={{ maxWidth: "850px" }}
                   >
-                     <div
-                        className="bg-white rounded-pill p-2 border shadow-lg d-flex align-items-center gap-3 w-100"
-                        ref={searchBarRef}
-                     >
+                     <div className="bg-white rounded-pill p-2 border shadow-lg d-flex align-items-center gap-3 w-100">
                         {/* Destination Column */}
                         <div
-                           className="flex-grow-1 px-4 border-end"
-                           onClick={() => setIsDestinationOpen(true)}
+                           className="flex-grow-1 px-4 border-end cursor-pointer"
+                           onClick={() => {
+                              setIsGuestOpen(false);
+                              setShowDatePicker(false);
+                              setIsDestinationOpen(true);
+                           }}
                         >
                            <div className="extra-small fw-semibold text-muted">
                               <PiMapPinLight
@@ -370,9 +376,12 @@ export default function ExpandableSearchHeader() {
 
                         {/* Date Column */}
                         <div
-                           className="flex-grow-1 px-3 border-end"
-                           style={{ cursor: "pointer" }}
-                           onClick={() => setShowDatePicker(!showDatePicker)}
+                           className="flex-grow-1 px-3 border-end cursor-pointer"
+                           onClick={() => {
+                              setIsDestinationOpen(false);
+                              setIsGuestOpen(false);
+                              setShowDatePicker((prev) => !prev);
+                           }}
                         >
                            <div className="extra-small fw-semibold text-muted">
                               <HiCalendarDateRange
@@ -405,7 +414,11 @@ export default function ExpandableSearchHeader() {
                            </div>
                            <div className="position-relative">
                               <div
-                                 onClick={() => setIsGuestOpen(!isGuestOpen)}
+                                 onClick={() => {
+                                    setIsDestinationOpen(false);
+                                    setShowDatePicker(false);
+                                    setIsGuestOpen(!isGuestOpen);
+                                 }}
                                  className="cursor-pointer"
                               >
                                  <div className="text-secondary small">
@@ -422,41 +435,6 @@ export default function ExpandableSearchHeader() {
                            </div>
                         </div>
 
-                        {/* DatePicker Overlay targeting the search bar */}
-                        <Overlay
-                           target={searchBarRef}
-                           show={showDatePicker}
-                           placement="bottom"
-                           rootClose={true}
-                           onHide={() => setShowDatePicker(false)}
-                        >
-                           {/* eslint-disable @typescript-eslint/no-unused-vars */}
-                           {({
-                              placement,
-                              arrowProps,
-                              show: _show,
-                              popper,
-                              hasDoneInitialMeasure,
-                              ...props
-                           }) => (
-                              /* eslint-enable @typescript-eslint/no-unused-vars */
-                              <div
-                                 {...props}
-                                 style={{
-                                    ...props.style,
-                                    zIndex: 1050,
-                                    width: "100%",
-                                    maxWidth: "850px",
-                                    marginTop: "4px",
-                                 }}
-                              >
-                                 <DatePicker
-                                    onDateChange={(range) => setDates(range)}
-                                 />
-                              </div>
-                           )}
-                        </Overlay>
-
                         {/* Search Action Button */}
                         <button
                            onClick={handleSearch}
@@ -465,6 +443,28 @@ export default function ExpandableSearchHeader() {
                            <FiSearch color="#fff" size={20} />
                         </button>
                      </div>
+
+                     {/* Inline Popover Positioned Absolute under Search Bar */}
+                     {showDatePicker && (
+                        <div
+                           ref={datePickerRef}
+                           onClick={(e) => e.stopPropagation()}
+                           className="position-absolute bg-white rounded-4 shadow-lg border p-4"
+                           style={{
+                              top: "100%",
+                              left: "50%",
+                              transform: "translateX(-50%)",
+                              marginTop: "12px",
+                              zIndex: 1050,
+                              width: "max-content", // Allows the container to expand naturally to fit two months side-by-side
+                              maxWidth: "90vw", // Prevents overflow on smaller screen sizes
+                           }}
+                        >
+                           <DatePicker
+                              onDateChange={(range) => setDates(range)}
+                           />
+                        </div>
+                     )}
                   </div>
                </div>
             )}

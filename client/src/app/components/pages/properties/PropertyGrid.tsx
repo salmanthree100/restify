@@ -2,15 +2,14 @@
 
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
-import { Container } from "react-bootstrap";
+import { Container, Pagination } from "react-bootstrap";
 import { PropertyCard } from "./PropertyCard";
 import { Property } from "@/app/types";
 import SearchFilterModal from "@/app/components/common/SearchFilterModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { IoFilterSharp } from "react-icons/io5";
 import { useLocale } from "@/context/LocaleContext";
 
-// Dynamically import PropertyMap with SSR disabled
 const PropertyMap = dynamic(() => import("./PropertyMap"), {
    ssr: false,
    loading: () => (
@@ -23,16 +22,37 @@ const PropertyMap = dynamic(() => import("./PropertyMap"), {
    ),
 });
 
-interface PropertyGridProps {
-   properties: Property[];
+export interface PaginationMeta {
+   page: number;
+   pageSize: number;
+   pageCount: number;
+   total: number;
 }
 
-export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
+interface PropertyGridProps {
+   properties: Property[];
+   pagination?: PaginationMeta | null;
+}
+
+export const PropertyGrid: React.FC<PropertyGridProps> = ({
+   properties,
+   pagination,
+}) => {
    const [showMap, setShowMap] = useState(true);
    const [showFilter, setShowFilter] = useState(false);
    const handleClose = () => setShowFilter(false);
+
    const router = useRouter();
+   const pathname = usePathname();
+   const searchParams = useSearchParams();
    const { t } = useLocale();
+
+   // Handle changing page by preserving current search params
+   const handlePageChange = (newPage: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", newPage.toString());
+      router.push(`${pathname}?${params.toString()}`);
+   };
 
    if (!properties || properties.length === 0) {
       return (
@@ -49,6 +69,9 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
       );
    }
 
+   const page = pagination?.page || 1;
+   const pageCount = pagination?.pageCount || 1;
+
    return (
       <section style={{ margin: "100px 0" }}>
          <Container fluid className="px-3">
@@ -58,7 +81,8 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                   <div className="d-flex align-items-center justify-content-between col-lg-7 col-xl-8">
                      <div>
                         <h5 className="m-0 fw-bold">
-                           {properties.length} {t.propertyGrid.placesToStay}
+                           {pagination?.total ?? properties.length}{" "}
+                           {t.propertyGrid.placesToStay}
                         </h5>
                      </div>
                   </div>
@@ -98,6 +122,33 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                               </div>
                            ))}
                         </div>
+                        {/* Pagination Controls */}
+                        {pageCount > 1 && (
+                           <div className="d-flex justify-content-center mt-5">
+                              <Pagination>
+                                 <Pagination.Prev
+                                    disabled={page === 1}
+                                    onClick={() => handlePageChange(page - 1)}
+                                 />
+                                 {Array.from(
+                                    { length: pageCount },
+                                    (_, i) => i + 1,
+                                 ).map((p) => (
+                                    <Pagination.Item
+                                       key={p}
+                                       active={p === page}
+                                       onClick={() => handlePageChange(p)}
+                                    >
+                                       {p}
+                                    </Pagination.Item>
+                                 ))}
+                                 <Pagination.Next
+                                    disabled={page === pageCount}
+                                    onClick={() => handlePageChange(page + 1)}
+                                 />
+                              </Pagination>
+                           </div>
+                        )}
                      </div>
                      <div className="col-lg-5 col-xl-4">
                         <div
@@ -121,6 +172,34 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({ properties }) => {
                      ))}
                   </div>
                )}
+
+               {/* Pagination Controls */}
+               {!showMap && pageCount > 1 && (
+                  <div className="d-flex justify-content-center mt-5">
+                     <Pagination>
+                        <Pagination.Prev
+                           disabled={page === 1}
+                           onClick={() => handlePageChange(page - 1)}
+                        />
+                        {Array.from({ length: pageCount }, (_, i) => i + 1).map(
+                           (p) => (
+                              <Pagination.Item
+                                 key={p}
+                                 active={p === page}
+                                 onClick={() => handlePageChange(p)}
+                              >
+                                 {p}
+                              </Pagination.Item>
+                           ),
+                        )}
+                        <Pagination.Next
+                           disabled={page === pageCount}
+                           onClick={() => handlePageChange(page + 1)}
+                        />
+                     </Pagination>
+                  </div>
+               )}
+
                {showFilter && (
                   <SearchFilterModal
                      isOpen={showFilter}
