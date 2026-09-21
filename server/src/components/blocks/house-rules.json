@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_blocks_house_rules",
+  "info": {
+    "displayName": "House Rules"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "policyName": {
+      "type": "component",
+      "component": "elements.policies",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

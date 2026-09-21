@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_elements_photo_categories",
+  "info": {
+    "displayName": "Photo Category"
+  },
+  "options": {},
+  "attributes": {
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Living room",
+        "Dining room",
+        "Kitchen",
+        "Bedroom",
+        "Bathroom",
+        "Exterior",
+        "Extra photos"
+      ]
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  },
+  "config": {}
+}

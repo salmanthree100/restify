@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_elements_about_hosts",
+  "info": {
+    "displayName": "aboutHost"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

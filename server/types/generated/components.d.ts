@@ -71,6 +71,18 @@ export interface BlocksHeroSection extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksHouseRules extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_house_rules';
+  info: {
+    displayName: 'House Rules';
+  };
+  attributes: {
+    description: Schema.Attribute.String;
+    policyName: Schema.Attribute.Component<'elements.policies', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksJourneySection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_journey_sections';
   info: {
@@ -137,6 +149,17 @@ export interface BlocksTrendingLocations extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsAboutHost extends Struct.ComponentSchema {
+  collectionName: 'components_elements_about_hosts';
+  info: {
+    displayName: 'aboutHost';
+  };
+  attributes: {
+    description: Schema.Attribute.String;
+    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+  };
+}
+
 export interface ElementsCategoryCard extends Struct.ComponentSchema {
   collectionName: 'components_elements_category_cards';
   info: {
@@ -147,6 +170,17 @@ export interface ElementsCategoryCard extends Struct.ComponentSchema {
     link: Schema.Attribute.String;
     subtitle: Schema.Attribute.String;
     title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsCoHosts extends Struct.ComponentSchema {
+  collectionName: 'components_elements_co_hosts';
+  info: {
+    displayName: 'coHosts';
+  };
+  attributes: {
+    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    name: Schema.Attribute.String;
   };
 }
 
@@ -176,6 +210,51 @@ export interface ElementsGuestStory extends Struct.ComponentSchema {
     positionX: Schema.Attribute.Decimal;
     positionY: Schema.Attribute.Decimal;
     quote: Schema.Attribute.Text;
+  };
+}
+
+export interface ElementsHighlight extends Struct.ComponentSchema {
+  collectionName: 'components_elements_highlights';
+  info: {
+    displayName: 'Highlight';
+  };
+  attributes: {
+    description: Schema.Attribute.String;
+    icon: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsPhotoCategory extends Struct.ComponentSchema {
+  collectionName: 'components_elements_photo_categories';
+  info: {
+    displayName: 'Photo Category';
+  };
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      [
+        'Living room',
+        'Dining room',
+        'Kitchen',
+        'Bedroom',
+        'Bathroom',
+        'Exterior',
+        'Extra photos',
+      ]
+    >;
+    images: Schema.Attribute.Media<'images', true>;
+  };
+}
+
+export interface ElementsPolicies extends Struct.ComponentSchema {
+  collectionName: 'components_elements_policies';
+  info: {
+    displayName: 'policies';
+  };
+  attributes: {
+    description: Schema.Attribute.RichText;
+    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -302,14 +381,20 @@ declare module '@strapi/strapi' {
       'blocks.guest-category': BlocksGuestCategory;
       'blocks.guest-stories-section': BlocksGuestStoriesSection;
       'blocks.hero-section': BlocksHeroSection;
+      'blocks.house-rules': BlocksHouseRules;
       'blocks.journey-section': BlocksJourneySection;
       'blocks.newsletter-section': BlocksNewsletterSection;
       'blocks.services-offer': BlocksServicesOffer;
       'blocks.top-picks-section': BlocksTopPicksSection;
       'blocks.trending-locations': BlocksTrendingLocations;
+      'elements.about-host': ElementsAboutHost;
       'elements.category-card': ElementsCategoryCard;
+      'elements.co-hosts': ElementsCoHosts;
       'elements.feature-item': ElementsFeatureItem;
       'elements.guest-story': ElementsGuestStory;
+      'elements.highlight': ElementsHighlight;
+      'elements.photo-category': ElementsPhotoCategory;
+      'elements.policies': ElementsPolicies;
       'elements.property-amenities': ElementsPropertyAmenities;
       'elements.property-types': ElementsPropertyTypes;
       'elements.service-feature': ElementsServiceFeature;

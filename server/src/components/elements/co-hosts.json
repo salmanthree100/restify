@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_elements_co_hosts",
+  "info": {
+    "displayName": "coHosts"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  },
+  "config": {}
+}
