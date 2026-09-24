@@ -32,6 +32,31 @@ export interface BlocksGuestCategory extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksGuestReviewsHeader extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_guest_reviews_headers';
+  info: {
+    displayName: 'Guest Reviews Header';
+  };
+  attributes: {
+    accuracyRating: Schema.Attribute.Decimal;
+    accuracyRatingLabel: Schema.Attribute.String;
+    averageRating: Schema.Attribute.Decimal;
+    averageRatingLabel: Schema.Attribute.String;
+    checkInRating: Schema.Attribute.Decimal;
+    checkInRatingLabel: Schema.Attribute.String;
+    cleanlinessRating: Schema.Attribute.Decimal;
+    cleanlinessRatingLabel: Schema.Attribute.String;
+    communicationRating: Schema.Attribute.Decimal;
+    communicationRatingLabel: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    locationRating: Schema.Attribute.Decimal;
+    locationRatingLabel: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+    valueRating: Schema.Attribute.Decimal;
+    valueRatingLabel: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksGuestStoriesSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_guest_stories_sections';
   info: {
@@ -156,7 +181,7 @@ export interface ElementsAboutHost extends Struct.ComponentSchema {
   };
   attributes: {
     description: Schema.Attribute.String;
-    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    iconName: Schema.Attribute.String;
   };
 }
 
@@ -213,18 +238,6 @@ export interface ElementsGuestStory extends Struct.ComponentSchema {
   };
 }
 
-export interface ElementsHighlight extends Struct.ComponentSchema {
-  collectionName: 'components_elements_highlights';
-  info: {
-    displayName: 'Highlight';
-  };
-  attributes: {
-    description: Schema.Attribute.String;
-    icon: Schema.Attribute.Media<'images'>;
-    title: Schema.Attribute.String;
-  };
-}
-
 export interface ElementsPhotoCategory extends Struct.ComponentSchema {
   collectionName: 'components_elements_photo_categories';
   info: {
@@ -253,7 +266,6 @@ export interface ElementsPolicies extends Struct.ComponentSchema {
   };
   attributes: {
     description: Schema.Attribute.RichText;
-    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     title: Schema.Attribute.String;
   };
 }
@@ -379,6 +391,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blocks.explore-world': BlocksExploreWorld;
       'blocks.guest-category': BlocksGuestCategory;
+      'blocks.guest-reviews-header': BlocksGuestReviewsHeader;
       'blocks.guest-stories-section': BlocksGuestStoriesSection;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.house-rules': BlocksHouseRules;
@@ -392,7 +405,6 @@ declare module '@strapi/strapi' {
       'elements.co-hosts': ElementsCoHosts;
       'elements.feature-item': ElementsFeatureItem;
       'elements.guest-story': ElementsGuestStory;
-      'elements.highlight': ElementsHighlight;
       'elements.photo-category': ElementsPhotoCategory;
       'elements.policies': ElementsPolicies;
       'elements.property-amenities': ElementsPropertyAmenities;

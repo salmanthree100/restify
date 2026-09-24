@@ -1,0 +1,58 @@
+{
+  "collectionName": "components_blocks_guest_reviews_headers",
+  "info": {
+    "displayName": "Guest Reviews Header"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "averageRating": {
+      "type": "decimal"
+    },
+    "checkInRating": {
+      "type": "decimal"
+    },
+    "accuracyRating": {
+      "type": "decimal"
+    },
+    "locationRating": {
+      "type": "decimal"
+    },
+    "valueRating": {
+      "type": "decimal"
+    },
+    "communicationRating": {
+      "type": "decimal"
+    },
+    "checkInRatingLabel": {
+      "type": "string"
+    },
+    "accuracyRatingLabel": {
+      "type": "string"
+    },
+    "locationRatingLabel": {
+      "type": "string"
+    },
+    "valueRatingLabel": {
+      "type": "string"
+    },
+    "communicationRatingLabel": {
+      "type": "string"
+    },
+    "averageRatingLabel": {
+      "type": "string"
+    },
+    "cleanlinessRating": {
+      "type": "decimal"
+    },
+    "cleanlinessRatingLabel": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

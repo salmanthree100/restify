@@ -234,16 +234,6 @@
       "component": "elements.photo-category",
       "repeatable": true
     },
-    "highlights": {
-      "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "elements.highlight",
-      "repeatable": true
-    },
     "amenities": {
       "type": "relation",
       "relation": "oneToMany",
@@ -260,6 +250,33 @@
       "relation": "oneToMany",
       "target": "api::review.review",
       "mappedBy": "property"
+    },
+    "reviewsSection": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.guest-reviews-header",
+      "repeatable": false
+    },
+    "extraGuestFee": {
+      "type": "integer",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": 25
+    },
+    "locationName": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

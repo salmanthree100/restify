@@ -110,7 +110,7 @@
         }
       },
       "component": "elements.about-host",
-      "repeatable": false
+      "repeatable": true
     },
     "title": {
       "type": "string",
