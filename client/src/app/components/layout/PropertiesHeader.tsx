@@ -220,10 +220,7 @@ export default function ExpandableSearchHeader() {
             style={{ zIndex: 1030 }} // Ensures the entire header overlays map components
          >
             <Navbar bg="white" expand="lg" className="py-2">
-               <Container
-                  fluid
-                  className="px-lg-5 px-3 d-flex align-items-center justify-content-between"
-               >
+               <Container className="d-flex align-items-center justify-content-between">
                   {/* 1. Logo */}
                   <Navbar.Brand as={Link} href="/" className="m-0">
                      <Image

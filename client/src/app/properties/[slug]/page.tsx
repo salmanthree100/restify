@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import qs from "qs";
 import { useLocale } from "@/context/LocaleContext";
 import { use } from "react";
+import { Property } from "@/app/types";
+import HeroSlider from "@/app/components/pages/properties/properties-details/HeroSlider";
 
 const PropertiesDetailsPage = ({
    params,
@@ -12,7 +14,9 @@ const PropertiesDetailsPage = ({
 }) => {
    const { slug } = use(params);
    const { locale } = useLocale();
-   const [propertiesDetails, setPropertiesDetails] = useState([]);
+   const [propertiesDetails, setPropertiesDetails] = useState<Property | null>(
+      null,
+   );
    const [isLoading, setIsLoading] = useState(true);
 
    useEffect(() => {
@@ -99,7 +103,15 @@ const PropertiesDetailsPage = ({
       fetchProperties();
    }, [slug, locale]);
 
-   return <div></div>;
+   return (
+      <div>
+         {!isLoading && (
+            <HeroSlider
+               categorizedPhotos={propertiesDetails?.categorizedPhotos || []}
+            />
+         )}
+      </div>
+   );
 };
 
 export default PropertiesDetailsPage;

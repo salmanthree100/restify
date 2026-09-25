@@ -109,4 +109,5 @@ export interface Property {
    bedroomsText: string;
    bathroomsText: string;
    pricePerNightText: string;
+   categorizedPhotos: [];
 }
