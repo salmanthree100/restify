@@ -63,3 +63,122 @@ export function formatLocalDate(date: Date): string {
 
    return `${year}-${month}-${day}`;
 }
+
+// Icon dictionary for mapping icons in PropertyDescription.tsx
+// accros multiple locales
+
+export const ICON_KEYWORDS: Record<string, string[]> = {
+   location: [
+      // English
+      "location",
+      "map",
+      "located",
+      "address",
+      "distance",
+      // Spanish
+      "ubicación",
+      "mapa",
+      "ubicado",
+      "dirección",
+      "distancia",
+      // French
+      "emplacement",
+      "carte",
+      "situé",
+      "adresse",
+      "distance",
+      // German
+      "standort",
+      "karte",
+      "lage",
+      "adresse",
+      "entfernung",
+      // Korean
+      "위치",
+      "지도",
+      "주소",
+      "거리",
+      "인근",
+      // Japanese
+      "位置",
+      "場所",
+      "マップ",
+      "地図",
+      "住所",
+      "アクセス",
+      "距離",
+   ],
+   security: [
+      // English
+      "security",
+      "shield",
+      "safe",
+      "protection",
+      "insurance",
+      "home",
+      // Spanish
+      "seguridad",
+      "protección",
+      "seguro",
+      "casa",
+      // French
+      "sécurité",
+      "protection",
+      "assurance",
+      "maison",
+      // German
+      "sicherheit",
+      "schutz",
+      "versicherung",
+      // Korean
+      "보안",
+      "안전",
+      "보호",
+      "보험",
+      "우리집",
+      // Japanese
+      "セキュリティ",
+      "安全",
+      "保護",
+      "保険",
+      "安心",
+   ],
+   key: [
+      // English
+      "key",
+      "check-in",
+      "checkin",
+      "access",
+      "entry",
+      "lockbox",
+      // Spanish
+      "clave",
+      "llave",
+      "entrada",
+      "acceso",
+      // French
+      "clé",
+      "clef",
+      "arrivée",
+      "accès",
+      // German
+      "schlüssel",
+      "anreise",
+      "zugang",
+      // Korean
+      "열쇠",
+      "키",
+      "체크인",
+      "출입",
+      "입장",
+      "비밀번호",
+      // Japanese
+      "鍵",
+      "キー",
+      "チェックイン",
+      "アクセス",
+      "入場",
+      "入室",
+      "スマートロック",
+   ],
+};

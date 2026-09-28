@@ -216,10 +216,14 @@ export default function ExpandableSearchHeader() {
       <>
          <header
             ref={headerRef}
-            className="bg-white border-bottom sticky-top shadow-sm transition-all position-relative"
-            style={{ zIndex: 1030 }} // Ensures the entire header overlays map components
+            className="bg-white transition-all position-relative"
+            style={{ zIndex: 1030, marginBottom: "50px" }} // Ensures the entire header overlays map components
          >
-            <Navbar bg="white" expand="lg" className="py-2">
+            <Navbar
+               bg="white"
+               expand="lg"
+               className="py-2 fixed-top border-bottom shadow-sm"
+            >
                <Container className="d-flex align-items-center justify-content-between">
                   {/* 1. Logo */}
                   <Navbar.Brand as={Link} href="/" className="m-0">
@@ -328,8 +332,12 @@ export default function ExpandableSearchHeader() {
             {isExpanded && (
                <div className="pb-4 pt-2 px-3 border-top bg-white">
                   <div
-                     className="d-flex justify-content-center my-2 position-relative w-100 mx-auto"
-                     style={{ maxWidth: "850px" }}
+                     className="d-flex justify-content-center position-relative w-100 mx-auto"
+                     style={{
+                        maxWidth: "850px",
+                        marginTop: "100px",
+                        marginBottom: "0px",
+                     }}
                   >
                      <div className="bg-white rounded-pill p-2 border shadow-lg d-flex align-items-center gap-3 w-100">
                         {/* Destination Column */}

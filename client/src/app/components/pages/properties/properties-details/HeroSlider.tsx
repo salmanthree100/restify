@@ -61,7 +61,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
    };
 
    return (
-      <section style={{ marginBottom: "24px", marginTop: "42px" }}>
+      <section style={{ marginBottom: "24px", marginTop: "100px" }}>
          <Container>
             <div className="position-relative overflow-hidden">
                {/* Custom Styles for Center-Focused Slide Scaling */}

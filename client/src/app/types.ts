@@ -110,4 +110,7 @@ export interface Property {
    bathroomsText: string;
    pricePerNightText: string;
    categorizedPhotos: [];
+   description: [];
+   propertyType: string;
+   amenities: [];
 }

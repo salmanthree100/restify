@@ -6,6 +6,8 @@ import { useLocale } from "@/context/LocaleContext";
 import { use } from "react";
 import { Property } from "@/app/types";
 import HeroSlider from "@/app/components/pages/properties/properties-details/HeroSlider";
+import PropertyDescription from "@/app/components/pages/properties/properties-details/PropertyDescription";
+import AmenitiesList from "@/app/components/pages/properties/properties-details/AmenitiesList";
 
 const PropertiesDetailsPage = ({
    params,
@@ -106,9 +108,24 @@ const PropertiesDetailsPage = ({
    return (
       <div>
          {!isLoading && (
-            <HeroSlider
-               categorizedPhotos={propertiesDetails?.categorizedPhotos || []}
-            />
+            <div>
+               <HeroSlider
+                  categorizedPhotos={propertiesDetails?.categorizedPhotos || []}
+               />
+               <PropertyDescription
+                  description={propertiesDetails?.description || []}
+                  title={propertiesDetails?.title}
+                  rating={propertiesDetails?.rating}
+                  reviewsCount={propertiesDetails?.reviewsCount}
+                  bedrooms={propertiesDetails?.bedrooms}
+                  bathrooms={propertiesDetails?.bathrooms}
+                  maxGuests={propertiesDetails?.maxGuests}
+                  propertyType={propertiesDetails?.propertyType}
+                  bedroomsText={propertiesDetails?.bedroomsText}
+                  bathroomsText={propertiesDetails?.bathroomsText}
+               />
+               <AmenitiesList amenities={propertiesDetails?.amenities} />
+            </div>
          )}
       </div>
    );
