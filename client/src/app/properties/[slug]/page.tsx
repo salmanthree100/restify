@@ -8,6 +8,8 @@ import { Property } from "@/app/types";
 import HeroSlider from "@/app/components/pages/properties/properties-details/HeroSlider";
 import PropertyDescription from "@/app/components/pages/properties/properties-details/PropertyDescription";
 import AmenitiesList from "@/app/components/pages/properties/properties-details/AmenitiesList";
+import SelectDates from "@/app/components/pages/properties/properties-details/SelectDates";
+import GuestReviews from "@/app/components/pages/properties/properties-details/GuestReviews";
 
 const PropertiesDetailsPage = ({
    params,
@@ -125,6 +127,13 @@ const PropertiesDetailsPage = ({
                   bathroomsText={propertiesDetails?.bathroomsText}
                />
                <AmenitiesList amenities={propertiesDetails?.amenities} />
+               <SelectDates />
+               <GuestReviews
+                  reviewsSection={propertiesDetails?.reviewsSection}
+                  reviews={propertiesDetails?.reviews}
+                  rating={propertiesDetails?.rating}
+                  reviewsCount={propertiesDetails?.reviewsCount}
+               />
             </div>
          )}
       </div>

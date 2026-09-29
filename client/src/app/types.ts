@@ -113,4 +113,8 @@ export interface Property {
    description: [];
    propertyType: string;
    amenities: [];
+   reviewsSection: {
+      id: number;
+   };
+   reviews: [];
 }

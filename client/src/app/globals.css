@@ -92,6 +92,11 @@ a {
   border-radius: 50%;
 }
 
+.rdp-button_previous svg,
+.rdp-button_next svg {
+  fill: var(--text-950) !important;
+}
+
 /* --- Weekdays Header Elements --- */
 .rdp-head_cell {
   font-size: 0.88rem !important;
