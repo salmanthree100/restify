@@ -10,6 +10,9 @@ import PropertyDescription from "@/app/components/pages/properties/properties-de
 import AmenitiesList from "@/app/components/pages/properties/properties-details/AmenitiesList";
 import SelectDates from "@/app/components/pages/properties/properties-details/SelectDates";
 import GuestReviews from "@/app/components/pages/properties/properties-details/GuestReviews";
+import PoliciesSection from "@/app/components/pages/properties/properties-details/PoliciesSection";
+import LocationSection from "@/app/components/pages/properties/properties-details/LocationSection";
+import HostSection from "@/app/components/pages/properties/properties-details/HostSection";
 
 const PropertiesDetailsPage = ({
    params,
@@ -64,6 +67,10 @@ const PropertiesDetailsPage = ({
                   host: {
                      populate: {
                         avatar: {
+                           populate: "*",
+                        },
+                        hostInfo: true,
+                        otherHosts: {
                            populate: "*",
                         },
                      },
@@ -134,6 +141,16 @@ const PropertiesDetailsPage = ({
                   rating={propertiesDetails?.rating}
                   reviewsCount={propertiesDetails?.reviewsCount}
                />
+               <PoliciesSection
+                  propertyPolicies={propertiesDetails?.propertyPolicies}
+               />
+               <LocationSection
+                  locationText={propertiesDetails?.locationName}
+                  latitude={propertiesDetails?.latitude}
+                  longitude={propertiesDetails?.longitude}
+                  title={propertiesDetails?.title}
+               />
+               <HostSection host={propertiesDetails?.host} />
             </div>
          )}
       </div>

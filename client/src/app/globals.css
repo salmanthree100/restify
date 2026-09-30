@@ -252,6 +252,14 @@ a {
   margin: 0 5px !important;
 }
 
+.policy-content p {
+  margin-bottom: 20px !important;
+}
+
+.policy-content p:last-child {
+  margin-bottom: 0 !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

@@ -6,7 +6,6 @@ import L from "leaflet";
 import Image from "next/image";
 import "leaflet/dist/leaflet.css";
 
-// 1. Fix Leaflet default marker icon paths in Next.js
 const customIcon = new L.Icon({
    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
    iconRetinaUrl:
@@ -18,7 +17,7 @@ const customIcon = new L.Icon({
    shadowSize: [41, 41],
 });
 
-interface Property {
+export interface Property {
    id: number | string;
    title?: string;
    pricePerNight?: number;
@@ -29,10 +28,18 @@ interface Property {
 
 interface PropertyMapProps {
    properties: Property[];
+   zoom?: number;
+   height?: string;
+   showPopup?: boolean;
 }
 
-// 2. Helper component to auto-recenter map when properties change
-function MapRecenter({ properties }: { properties: Property[] }) {
+function MapRecenter({
+   properties,
+   zoom,
+}: {
+   properties: Property[];
+   zoom?: number;
+}) {
    const map = useMap();
 
    useEffect(() => {
@@ -44,17 +51,23 @@ function MapRecenter({ properties }: { properties: Property[] }) {
          )
          .map((p) => [p.latitude!, p.longitude!] as [number, number]);
 
-      if (validCoords.length > 0) {
+      if (validCoords.length === 1) {
+         map.setView(validCoords[0], zoom || 13);
+      } else if (validCoords.length > 1) {
          const bounds = L.latLngBounds(validCoords);
-         map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+         map.fitBounds(bounds, { padding: [50, 50], maxZoom: zoom || 14 });
       }
-   }, [properties, map]);
+   }, [properties, map, zoom]);
 
    return null;
 }
 
-export default function PropertyMap({ properties }: PropertyMapProps) {
-   // Filter out properties missing latitude or longitude
+export default function PropertyMap({
+   properties,
+   zoom = 12,
+   height = "500px",
+   showPopup = true,
+}: PropertyMapProps) {
    const validProperties = properties.filter(
       (p) =>
          p.latitude !== undefined &&
@@ -63,7 +76,6 @@ export default function PropertyMap({ properties }: PropertyMapProps) {
          p.longitude !== null,
    );
 
-   // Default center if no coordinates are available (e.g., Sydney)
    const defaultCenter: [number, number] =
       validProperties.length > 0
          ? [validProperties[0].latitude!, validProperties[0].longitude!]
@@ -71,12 +83,12 @@ export default function PropertyMap({ properties }: PropertyMapProps) {
 
    return (
       <div
-         className="w-100 h-100 rounded-3 overflow-hidden shadow-sm"
-         style={{ minHeight: "500px" }}
+         className="w-100 rounded-4 overflow-hidden shadow-sm"
+         style={{ height }}
       >
          <MapContainer
             center={defaultCenter}
-            zoom={12}
+            zoom={zoom}
             scrollWheelZoom={false}
             style={{ height: "100%", width: "100%" }}
          >
@@ -85,7 +97,7 @@ export default function PropertyMap({ properties }: PropertyMapProps) {
                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <MapRecenter properties={validProperties} />
+            <MapRecenter properties={validProperties} zoom={zoom} />
 
             {validProperties.map((property) => (
                <Marker
@@ -93,40 +105,46 @@ export default function PropertyMap({ properties }: PropertyMapProps) {
                   position={[property.latitude!, property.longitude!]}
                   icon={customIcon}
                >
-                  <Popup className="property-map-popup">
-                     <div style={{ width: "180px" }}>
-                        {property.images && property.images[0] && (
-                           <div
-                              className="position-relative w-100 mb-2"
-                              style={{ height: "100px" }}
+                  {showPopup && (
+                     <Popup className="property-map-popup">
+                        <div style={{ width: "180px" }}>
+                           {property.images && property.images[0] && (
+                              <div
+                                 className="position-relative w-100 mb-2"
+                                 style={{ height: "100px" }}
+                              >
+                                 <Image
+                                    src={
+                                       property.images[0].url.startsWith("http")
+                                          ? property.images[0].url
+                                          : `${process.env.NEXT_PUBLIC_STRAPI_LOCAL_URL || "http://localhost:1337"}${property.images[0].url}`
+                                    }
+                                    alt={property.title || "Property"}
+                                    fill
+                                    className="object-fit-cover rounded"
+                                 />
+                              </div>
+                           )}
+                           <h6
+                              className="m-0 text-truncate font-weight-bold"
+                              style={{ fontSize: "14px" }}
                            >
-                              <Image
-                                 src={
-                                    property.images[0].url.startsWith("http")
-                                       ? property.images[0].url
-                                       : `${process.env.NEXT_PUBLIC_STRAPI_LOCAL_URL || "http://localhost:1337"}${property.images[0].url}`
-                                 }
-                                 alt={property.title || "Property"}
-                                 fill
-                                 className="object-fit-cover rounded"
-                              />
-                           </div>
-                        )}
-                        <h6
-                           className="m-0 text-truncate font-weight-bold"
-                           style={{ fontSize: "14px" }}
-                        >
-                           {property.title}
-                        </h6>
-                        <p
-                           className="m-0 text-primary fw-bold"
-                           style={{ fontSize: "13px" }}
-                        >
-                           ${property.pricePerNight}{" "}
-                           <span className="text-muted fw-normal">/ night</span>
-                        </p>
-                     </div>
-                  </Popup>
+                              {property.title}
+                           </h6>
+                           {property.pricePerNight && (
+                              <p
+                                 className="m-0 text-primary fw-bold"
+                                 style={{ fontSize: "13px" }}
+                              >
+                                 ${property.pricePerNight}{" "}
+                                 <span className="text-muted fw-normal">
+                                    / night
+                                 </span>
+                              </p>
+                           )}
+                        </div>
+                     </Popup>
+                  )}
                </Marker>
             ))}
          </MapContainer>

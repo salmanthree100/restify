@@ -3,7 +3,7 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import Image from "next/image";
-import { FaStar, FaRegStar, FaTrophy } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
 import {
    LuSparkles,
    LuKey,
@@ -12,6 +12,7 @@ import {
    LuTag,
 } from "react-icons/lu";
 import { HiOutlineCheckCircle } from "react-icons/hi2";
+import { getStrapiMedia } from "@/lib/utils";
 
 // Types corresponding to Strapi Data structure
 export interface ReviewsSection {
@@ -37,14 +38,15 @@ export interface ReviewsSection {
 export interface ReviewItem {
    id: number;
    reviewerName?: string;
-   reviewerLocation?: string;
+   reviewerCountry?: string;
    reviewerAvatar?: {
       url?: string;
+      width: number;
+      height: number;
    };
-   rating?: number;
-   date?: string;
+   reviewDate: string;
    comment?: string;
-   timeAgo?: string;
+   reviewerRating: number;
 }
 
 interface GuestReviewsProps {
@@ -57,8 +59,6 @@ interface GuestReviewsProps {
 const GuestReviews: React.FC<GuestReviewsProps> = ({
    reviewsSection,
    reviews = [],
-   rating = 4.9,
-   reviewsCount = 43,
 }) => {
    if (!reviewsSection) return null;
 
@@ -96,22 +96,76 @@ const GuestReviews: React.FC<GuestReviewsProps> = ({
       },
    ];
 
-   const baseUrl =
-      process.env.NEXT_PUBLIC_STRAPI_CLOUD_URL ||
-      process.env.NEXT_PUBLIC_STRAPI_LOCAL_URL ||
-      "http://localhost:1337";
+   // format comment date:
+   function formatDate(dateString: string) {
+      const date = new Date(dateString);
+      return date.toLocaleString("en-US", {
+         month: "long",
+         day: "numeric",
+         year: "numeric",
+      });
+   }
+
+   // Circular Progress Wrapper Component for the Icons
+   const RatingProgressCircle: React.FC<{
+      score: number;
+      maxScore?: number;
+      children: React.ReactNode;
+   }> = ({ score, maxScore = 5, children }) => {
+      const size = 52;
+      const strokeWidth = 3;
+      const radius = (size - strokeWidth) / 2;
+      const circumference = 2 * Math.PI * radius;
+      const progressPercentage = Math.min(Math.max(score / maxScore, 0), 1);
+      const strokeDashoffset =
+         circumference - progressPercentage * circumference;
+
+      return (
+         <div
+            className="position-relative d-inline-flex align-items-center justify-content-center"
+            style={{ width: size, height: size }}
+         >
+            <svg
+               width={size}
+               height={size}
+               className="position-absolute"
+               style={{ transform: "rotate(-90deg)" }}
+            >
+               {/* Background Track Circle */}
+               <circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={radius}
+                  stroke="#E5E7EB"
+                  strokeWidth={strokeWidth}
+                  fill="transparent"
+               />
+               {/* Dynamic Score Fill Circle */}
+               <circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={radius}
+                  stroke="#E23212"
+                  strokeWidth={strokeWidth}
+                  fill="transparent"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={strokeDashoffset}
+                  strokeLinecap="round"
+               />
+            </svg>
+            {/* Icon centered inside ring */}
+            <div className="position-relative z-1 d-flex align-items-center justify-content-center text-dark">
+               {children}
+            </div>
+         </div>
+      );
+   };
 
    return (
-      <section className="py-5 border-top">
+      <section className="py-5">
          <Container>
             {/* Banner Section */}
             <div className="text-center mb-5">
-               <div className="d-flex align-items-center justify-content-center gap-3 mb-2">
-                  <span className="display-3 fw-bold text-dark">
-                     {reviewsSection.averageRating || rating}
-                  </span>
-                  <FaTrophy className="text-warning display-5" />
-               </div>
                <h2 className="fw-bold mb-2">
                   {reviewsSection.title || "Guest reviews"}
                </h2>
@@ -119,111 +173,118 @@ const GuestReviews: React.FC<GuestReviewsProps> = ({
                   className="text-muted max-w-md mx-auto"
                   style={{ maxWidth: "600px" }}
                >
-                  {reviewsSection.description ||
-                     "This home is in the top 5% of eligible listings based on ratings, reviews, and reliability."}
+                  {reviewsSection.description}
                </p>
             </div>
 
             {/* Rating Breakdown Grid */}
-            <Row className="g-4 mb-5 pb-4 border-bottom">
+            <div
+               className="mb-5 pb-4 border-bottom d-grid gap-4 text-center"
+               style={{
+                  gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+               }}
+            >
+               {/* Item Average Tile */}
+               <div className="d-flex flex-column align-items-center justify-content-center px-2">
+                  <div className="d-flex align-items-center gap-1 mb-1">
+                     <FaStar className="text-warning fs-5" />
+                     <span className="fw-bold fs-4 text-dark">
+                        {(reviewsSection?.averageRating || 4.9).toFixed(1)}
+                        <span className="fs-6 text-muted fw-normal"> / 5</span>
+                     </span>
+                  </div>
+                  <span className="text-muted small fw-medium">
+                     {reviewsSection.averageRatingLabel || "Item average"}
+                  </span>
+               </div>
+
+               {/* Category Tiles with Progress Outline */}
                {ratingCategories.map((item, idx) => (
-                  <Col xs={12} sm={6} md={4} lg={2} key={idx}>
-                     <Card className="h-100 border-0 bg-light p-3 rounded-3 text-start">
-                        <Card.Body className="p-0 d-flex flex-column justify-content-between">
-                           <div className="mb-3">
-                              <span className="fw-semibold text-dark d-block mb-1">
-                                 {item.label}
-                              </span>
-                              <span className="fs-4 fw-bold">
-                                 {item.score.toFixed(1)}
-                              </span>
-                           </div>
-                           <div>{item.icon}</div>
-                        </Card.Body>
-                     </Card>
-                  </Col>
+                  <div
+                     key={idx}
+                     className="d-flex flex-column align-items-center justify-content-between px-2"
+                  >
+                     <div className="d-flex align-items-center gap-1 mb-2">
+                        <FaStar className="text-warning small" />
+                        <span className="fw-bold text-dark small">
+                           {item.score.toFixed(1)}
+                        </span>
+                     </div>
+
+                     {/* Circular Progress Outline */}
+                     <div className="mb-2">
+                        <RatingProgressCircle score={item.score}>
+                           {item.icon}
+                        </RatingProgressCircle>
+                     </div>
+
+                     <span className="text-muted small text-capitalize fw-medium">
+                        {item.label}
+                     </span>
+                  </div>
                ))}
-            </Row>
+            </div>
 
             {/* Individual Reviews Section */}
             {reviews.length > 0 && (
                <div>
-                  <h4 className="fw-bold mb-4">
-                     {reviewsCount} {reviewsCount === 1 ? "Review" : "Reviews"}
-                  </h4>
                   <Row className="g-4">
                      {reviews.map((review) => {
-                        const avatarUrl = review.reviewerAvatar?.url
-                           ? review.reviewerAvatar.url.startsWith("http")
-                              ? review.reviewerAvatar.url
-                              : `${baseUrl}${review.reviewerAvatar.url}`
-                           : "/images/default-avatar.png";
+                        const avatarUrl =
+                           getStrapiMedia(review.reviewerAvatar?.url) || "";
 
                         return (
                            <Col xs={12} md={6} key={review.id}>
                               <Card className="border-0 h-100 p-2">
                                  <Card.Body className="p-0">
                                     {/* Reviewer Header */}
-                                    <div className="d-flex align-items-center mb-3">
-                                       <div
-                                          className="rounded-circle overflow-hidden me-3 position-relative"
-                                          style={{
-                                             width: "48px",
-                                             height: "48px",
-                                          }}
-                                       >
-                                          <Image
-                                             src={avatarUrl}
-                                             alt={
-                                                review.reviewerName ||
-                                                "Guest Avatar"
-                                             }
-                                             fill
-                                             className="object-fit-cover"
-                                          />
+                                    <div className="d-flex align-items-center justify-content-between mb-3">
+                                       <div className="d-flex align-items-center overflow-hidden position-relative">
+                                          <div className="me-2">
+                                             <Image
+                                                src={avatarUrl}
+                                                width={
+                                                   review.reviewerAvatar?.width
+                                                }
+                                                height={
+                                                   review.reviewerAvatar?.height
+                                                }
+                                                alt={
+                                                   review.reviewerName ||
+                                                   "Guest Avatar"
+                                                }
+                                             />
+                                          </div>
+                                          <div>
+                                             <h6 className="fw-bold mb-0">
+                                                {review.reviewerName ||
+                                                   "Anonymous Guest"}
+                                             </h6>
+                                             <small className="text-muted">
+                                                {review.reviewerCountry ||
+                                                   "Verified Guest"}
+                                             </small>
+                                          </div>
                                        </div>
-                                       <div>
-                                          <h6 className="fw-bold mb-0">
-                                             {review.reviewerName ||
-                                                "Anonymous Guest"}
-                                          </h6>
-                                          <small className="text-muted">
-                                             {review.reviewerLocation ||
-                                                "Verified Guest"}
-                                          </small>
+                                       <div className="text-dark">
+                                          <span className="me-1 text-warning">
+                                             <FaStar />
+                                          </span>
+                                          <span>{review.reviewerRating}</span>
                                        </div>
-                                    </div>
-
-                                    {/* Rating Stars & Date */}
-                                    <div className="d-flex align-items-center gap-2 mb-2">
-                                       <div className="d-flex text-warning">
-                                          {[...Array(5)].map((_, i) =>
-                                             i <
-                                             Math.floor(review.rating || 5) ? (
-                                                <FaStar
-                                                   key={i}
-                                                   className="me-1"
-                                                />
-                                             ) : (
-                                                <FaRegStar
-                                                   key={i}
-                                                   className="me-1"
-                                                />
-                                             ),
-                                          )}
-                                       </div>
-                                       <small className="text-muted fw-medium">
-                                          ·{" "}
-                                          {review.timeAgo ||
-                                             review.date ||
-                                             "Recently"}
-                                       </small>
                                     </div>
 
                                     {/* Review Text */}
                                     <Card.Text className="text-secondary lh-base">
                                        {review.comment}
                                     </Card.Text>
+                                    {/* Review Date */}
+                                    <div className="text-end mb-2">
+                                       <small className="text-muted fw-medium">
+                                          {formatDate(review.reviewDate) ||
+                                             "Recently"}
+                                       </small>
+                                    </div>
                                  </Card.Body>
                               </Card>
                            </Col>

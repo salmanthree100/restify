@@ -117,4 +117,15 @@ export interface Property {
       id: number;
    };
    reviews: [];
+   propertyPolicies: {
+      id: number;
+      title: string;
+      description: string;
+      policyName: [];
+   };
+   location: string;
+   latitude: number;
+   longitude: number;
+   locationName: string;
+   host: object;
 }
