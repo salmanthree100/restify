@@ -13,6 +13,9 @@ import GuestReviews from "@/app/components/pages/properties/properties-details/G
 import PoliciesSection from "@/app/components/pages/properties/properties-details/PoliciesSection";
 import LocationSection from "@/app/components/pages/properties/properties-details/LocationSection";
 import HostSection from "@/app/components/pages/properties/properties-details/HostSection";
+import BookingWidget from "@/app/components/pages/properties/properties-details/BookingWidget";
+import { Col, Container, Row } from "react-bootstrap";
+import { useSearch } from "@/context/SearchContext";
 
 const PropertiesDetailsPage = ({
    params,
@@ -25,6 +28,7 @@ const PropertiesDetailsPage = ({
       null,
    );
    const [isLoading, setIsLoading] = useState(true);
+   const { dates, guestCounts } = useSearch();
 
    useEffect(() => {
       async function fetchProperties() {
@@ -121,18 +125,35 @@ const PropertiesDetailsPage = ({
                <HeroSlider
                   categorizedPhotos={propertiesDetails?.categorizedPhotos || []}
                />
-               <PropertyDescription
-                  description={propertiesDetails?.description || []}
-                  title={propertiesDetails?.title}
-                  rating={propertiesDetails?.rating}
-                  reviewsCount={propertiesDetails?.reviewsCount}
-                  bedrooms={propertiesDetails?.bedrooms}
-                  bathrooms={propertiesDetails?.bathrooms}
-                  maxGuests={propertiesDetails?.maxGuests}
-                  propertyType={propertiesDetails?.propertyType}
-                  bedroomsText={propertiesDetails?.bedroomsText}
-                  bathroomsText={propertiesDetails?.bathroomsText}
-               />
+               <Container>
+                  <Row>
+                     <Col lg={8}>
+                        <PropertyDescription
+                           description={propertiesDetails?.description || []}
+                           title={propertiesDetails?.title}
+                           rating={propertiesDetails?.rating}
+                           reviewsCount={propertiesDetails?.reviewsCount}
+                           bedrooms={propertiesDetails?.bedrooms}
+                           bathrooms={propertiesDetails?.bathrooms}
+                           maxGuests={propertiesDetails?.maxGuests}
+                           propertyType={propertiesDetails?.propertyType}
+                           bedroomsText={propertiesDetails?.bedroomsText}
+                           bathroomsText={propertiesDetails?.bathroomsText}
+                        />
+                     </Col>
+                     <Col lg={4}>
+                        <BookingWidget
+                           pricePerNight={
+                              propertiesDetails?.pricePerNight || 250
+                           }
+                           extraGuestFee={propertiesDetails?.extraGuestFee}
+                           maxGuests={propertiesDetails?.maxGuests || 3}
+                           selectedDates={dates}
+                           guestCounts={guestCounts}
+                        />
+                     </Col>
+                  </Row>
+               </Container>
                <AmenitiesList amenities={propertiesDetails?.amenities} />
                <SelectDates />
                <GuestReviews

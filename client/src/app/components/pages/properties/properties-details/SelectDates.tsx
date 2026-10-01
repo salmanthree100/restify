@@ -1,10 +1,9 @@
 import DatePicker from "@/app/components/common/DatePicker";
-import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { DateRange } from "react-day-picker";
+import { useSearch } from "@/context/SearchContext";
 
 const SelectDates = () => {
-   const [dates, setDates] = useState<DateRange | undefined>(undefined);
+   const { dates, setDates } = useSearch();
 
    return (
       <section className="my-5">
@@ -14,7 +13,10 @@ const SelectDates = () => {
                   <div className="mb-4">
                      <h3 className="fw-bold">Select check-in dates</h3>
                   </div>
-                  <DatePicker onDateChange={(range) => setDates(range)} />
+                  <DatePicker
+                     selectedRange={dates}
+                     onDateChange={(range) => setDates(range)}
+                  />
                </Col>
             </Row>
          </Container>

@@ -111,7 +111,7 @@ export const PropertyDescription: React.FC<PropertyDescriptionProps> = ({
       <section>
          <Container>
             <Row>
-               <Col lg={8}>
+               <Col>
                   <Card className="border-0 shadow-sm mb-2 rounded-4">
                      <Card.Body>
                         {/* Header Section */}

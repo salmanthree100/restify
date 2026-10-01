@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import {
-   FaStar,
    FaShieldAlt,
    FaMedal,
    FaGraduationCap,
@@ -208,11 +207,12 @@ const HostSection: React.FC<HostSectionProps> = ({ host }) => {
                                  </div>
                                  {host?.isSuperhost && (
                                     <span
-                                       className="position-absolute bottom-0 end-0 bg-danger text-white rounded-circle d-flex align-items-center justify-content-center shadow"
+                                       className="position-absolute bottom-0 end-0 text-white rounded-circle d-flex align-items-center justify-content-center shadow"
                                        style={{
                                           width: "26px",
                                           height: "26px",
                                           transform: "translate(10%, 10%)",
+                                          backgroundColor: "#E23212",
                                        }}
                                        title="Superhost"
                                     >

@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import qs from "qs";
 import { useLocale } from "@/context/LocaleContext";
 import { FaPlus, FaMinus } from "react-icons/fa6";
+import { GuestCounts } from "@/context/SearchContext";
 
 export interface GuestCategoryConfig {
    id: number;
@@ -14,10 +15,6 @@ export interface GuestCategoryConfig {
    defaultValue?: number;
    min?: number;
    max?: number;
-}
-
-export interface GuestCounts {
-   [key: string]: number;
 }
 
 interface GuestPopoverProps {

@@ -7,6 +7,7 @@ import { LocaleProvider } from "@/context/LocaleContext";
 import Header from "@/app/components/layout/Header";
 import Footer from "@/app/components/layout/Footer";
 import { AuthProvider } from "@/context/AuthContext";
+import { SearchProvider } from "@/context/SearchContext";
 
 const inter = Inter({
    variable: "--font-inter",
@@ -25,9 +26,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <CurrencyProvider>
                <LocaleProvider>
                   <AuthProvider>
-                     <Header />
-                     {children}
-                     <Footer />
+                     <SearchProvider>
+                        <Header />
+                        {children}
+                        <Footer />
+                     </SearchProvider>
                   </AuthProvider>
                </LocaleProvider>
             </CurrencyProvider>

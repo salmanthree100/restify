@@ -22,6 +22,7 @@ interface ToleranceChip {
 
 // 1. Define the props interface for the callback
 interface DatePickerProps {
+   selectedRange?: DateRange | undefined;
    onDateChange: (range: DateRange | undefined) => void;
 }
 

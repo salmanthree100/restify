@@ -14,14 +14,12 @@ import { HiCalendarDateRange } from "react-icons/hi2";
 
 import DestinationPopover from "@/app/components/common/DestinationPopover";
 import DatePicker from "@/app/components/common/DatePicker";
-import GuestPopover, {
-   GuestCounts,
-} from "@/app/components/common/GuestPopover";
+import GuestPopover from "@/app/components/common/GuestPopover";
 import LanguageCurrencyModal from "@/app/components/common/LanguageCurrencyModal";
 import AuthModal from "@/app/components/auth/AuthModal";
 import { useAuth } from "@/context/AuthContext";
-import { DateRange } from "react-day-picker";
 import { formatLocalDate } from "@/lib/utils";
+import { useSearch } from "@/context/SearchContext";
 
 interface SelectedDestinationData {
    title: string;
@@ -38,6 +36,16 @@ export default function ExpandableSearchHeader() {
    const searchParams = useSearchParams();
    const { user, logout } = useAuth();
 
+   // Pull state from SearchContext instead of declaring local useState
+   const {
+      dates,
+      setDates,
+      guestCounts,
+      setGuestCounts,
+      destinationInput,
+      setDestinationInput,
+   } = useSearch();
+
    const [isExpanded, setIsExpanded] = useState(false);
    const [showLangModal, setShowLangModal] = useState(false);
    const [showAuthModal, setShowAuthModal] = useState(false);
@@ -53,28 +61,11 @@ export default function ExpandableSearchHeader() {
 
    // Search State
    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-   const [destinationInput, setDestinationInput] = useState(paramDestination);
    const [selectedDestination, setSelectedDestination] =
       useState<SelectedDestinationData | null>(null);
    const [isDestinationOpen, setIsDestinationOpen] = useState(false);
 
-   const [dates, setDates] = useState<DateRange | undefined>(() => {
-      if (paramCheckIn) {
-         return {
-            from: new Date(paramCheckIn),
-            to: paramCheckOut ? new Date(paramCheckOut) : undefined,
-         };
-      }
-      return undefined;
-   });
-
    const [isGuestOpen, setIsGuestOpen] = useState(false);
-   const [guestCounts, setGuestCounts] = useState<GuestCounts>(() => ({
-      adults: parseInt(searchParams.get("adults") || "0", 10),
-      children: parseInt(searchParams.get("children") || "0", 10),
-      infants: parseInt(searchParams.get("infants") || "0", 10),
-      pets: parseInt(searchParams.get("pets") || "0", 10),
-   }));
 
    // Active URL params for compact display fallback
    const destinationParam = paramDestination || "Anywhere";
@@ -435,7 +426,9 @@ export default function ExpandableSearchHeader() {
                                  isOpen={isGuestOpen}
                                  onClose={() => setIsGuestOpen(false)}
                                  guestCounts={guestCounts}
-                                 onChangeCounts={setGuestCounts}
+                                 onChangeCounts={(newCounts) =>
+                                    setGuestCounts(newCounts)
+                                 }
                               />
                            </div>
                         </div>

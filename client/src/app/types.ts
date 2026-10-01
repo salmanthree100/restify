@@ -128,4 +128,5 @@ export interface Property {
    longitude: number;
    locationName: string;
    host: object;
+   extraGuestFee: number;
 }
