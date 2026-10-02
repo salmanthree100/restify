@@ -146,7 +146,9 @@ const PropertiesDetailsPage = ({
                            pricePerNight={
                               propertiesDetails?.pricePerNight || 250
                            }
-                           extraGuestFee={propertiesDetails?.extraGuestFee}
+                           extraGuestFee={
+                              propertiesDetails?.extraGuestFee || 25
+                           }
                            maxGuests={propertiesDetails?.maxGuests || 3}
                            selectedDates={dates}
                            guestCounts={guestCounts}
