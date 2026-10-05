@@ -152,6 +152,10 @@ const PropertiesDetailsPage = ({
                            maxGuests={propertiesDetails?.maxGuests || 3}
                            selectedDates={dates}
                            guestCounts={guestCounts}
+                           title={propertiesDetails?.title || ""}
+                           locationName={propertiesDetails?.locationName || ""}
+                           rating={propertiesDetails?.rating || 4.9}
+                           images={propertiesDetails?.images || []}
                         />
                      </Col>
                   </Row>

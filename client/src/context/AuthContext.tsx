@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    const [token, setToken] = useState<string | null>(null);
    const [loading, setLoading] = useState<boolean>(true);
 
-   // 1. Declare logout first using useCallback so it can safely be referenced inside fetchCurrentUser
+   // 1. Logout Handler
    const logout = useCallback(() => {
       localStorage.removeItem("token");
       Cookies.remove("token");
@@ -50,29 +50,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
    }, []);
 
-   // 2. Fetch user function using useCallback
+   // Fetch user function using useCallback
    const fetchCurrentUser = useCallback(
       async (jwt: string) => {
          try {
-            const res = await fetch(
-               `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/users/me?populate=*`,
-               {
-                  headers: {
-                     Authorization: `Bearer ${jwt}`,
-                  },
+            const STRAPI_URL =
+               process.env.NEXT_PUBLIC_STRAPI_API_URL ||
+               process.env.NEXT_PUBLIC_STRAPI_CLOUD_URL ||
+               "http://localhost:1337";
+
+            const res = await fetch(`${STRAPI_URL}/api/users/me?populate=*`, {
+               headers: {
+                  Authorization: `Bearer ${jwt}`,
                },
-            );
+            });
 
             if (res.ok) {
                const userData: User = await res.json();
                setUser(userData);
             } else {
-               // Token invalid or expired
-               logout();
+               console.warn(
+                  "Strapi auth check failed with status:",
+                  res.status,
+               );
+               // ONLY log out if Strapi explicitly tells us the token is bad (401 / 403)
+               if (res.status === 401 || res.status === 403) {
+                  logout();
+               }
             }
          } catch (error) {
             console.error("Failed to fetch current user:", error);
-            logout();
+            // DO NOT call logout() here on network errors or URL misconfigurations!
          } finally {
             setLoading(false);
          }
@@ -80,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       [logout],
    );
 
-   // 3. Login handler
+   // 3. Login Handler
    const login = useCallback((newToken: string, newUser: User) => {
       localStorage.setItem("token", newToken);
       Cookies.set("token", newToken, {
@@ -93,7 +101,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(newUser);
    }, []);
 
-   // Initialize Auth State
+   // 4. Handle OAuth Callback
+   useEffect(() => {
+      if (typeof window === "undefined") return;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const accessToken =
+         urlParams.get("access_token") || urlParams.get("raw[access_token]");
+
+      if (accessToken) {
+         const STRAPI_URL =
+            process.env.NEXT_PUBLIC_STRAPI_API_URL ||
+            process.env.NEXT_PUBLIC_STRAPI_CLOUD_URL ||
+            "http://localhost:1337";
+
+         fetch(
+            `${STRAPI_URL}/api/auth/google/callback?access_token=${accessToken}`,
+         )
+            .then((res) => res.json())
+            .then((data) => {
+               if (data.jwt && data.user) {
+                  // PERSISTENCE FIX: Save token to both Storage & Cookie
+                  login(data.jwt, data.user);
+
+                  // Clean URL query params without reloading
+                  window.history.replaceState(
+                     {},
+                     document.title,
+                     window.location.pathname,
+                  );
+               }
+            })
+            .catch((err) =>
+               console.error("Error exchanging OAuth token:", err),
+            );
+      }
+   }, [login]);
+
+   // 5. Initialize Auth State on Initial Load / Page Refresh
    useEffect(() => {
       let isMounted = true;
 
@@ -116,39 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
    }, [fetchCurrentUser]);
 
-   // In AuthContext.tsx
-   useEffect(() => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const accessToken =
-         urlParams.get("access_token") || urlParams.get("raw[access_token]");
-
-      if (accessToken) {
-         const STRAPI_URL =
-            process.env.NEXT_PUBLIC_STRAPI_CLOUD_URL || "http://localhost:1337";
-
-         fetch(
-            `${STRAPI_URL}/api/auth/google/callback?access_token=${accessToken}`,
-         )
-            .then((res) => res.json())
-            .then((data) => {
-               if (data.jwt && data.user) {
-                  localStorage.setItem("token", data.jwt);
-                  setUser(data.user);
-                  // Remove query params from browser bar smoothly
-                  window.history.replaceState(
-                     {},
-                     document.title,
-                     window.location.pathname,
-                  );
-               }
-            })
-            .catch((err) =>
-               console.error("Error exchanging OAuth token:", err),
-            );
-      }
-   }, []);
-
-   // 5. Refetch Helper
+   // 6. Refetch Helper
    const refetchUser = useCallback(async () => {
       if (token) {
          await fetchCurrentUser(token);

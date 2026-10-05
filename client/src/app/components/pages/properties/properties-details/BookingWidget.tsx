@@ -9,6 +9,7 @@ import { useCurrency } from "@/context/CurrencyContext";
 import AuthModal from "@/app/components/auth/AuthModal";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { StrapiImage } from "@/app/types";
 
 export interface GuestCounts {
    [key: string]: number;
@@ -19,7 +20,11 @@ export interface GuestCounts {
 }
 
 export interface BookingWidgetProps {
+   title: string;
+   locationName: string;
    pricePerNight: number;
+   rating: number;
+   images: StrapiImage[];
    extraGuestFee?: number;
    baseGuestCapacity?: number;
    maxGuests: number;
@@ -41,6 +46,10 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
    maxGuests,
    selectedDates,
    guestCounts,
+   title,
+   locationName,
+   rating,
+   images,
    onReserve,
 }) => {
    const [showAuthModal, setShowAuthModal] = useState(false);
@@ -78,6 +87,20 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
    const navigateToBooking = () => {
       setShowAuthModal(false);
+      sessionStorage.setItem(
+         "booking_data",
+         JSON.stringify({
+            propertyTitle: title,
+            propertyLocation: locationName,
+            propertyRating: rating,
+            images,
+            dates: selectedDates,
+            guests: guestCounts,
+            totalPrice,
+            nights,
+            pricePerNight,
+         }),
+      );
       router.push(`/book/${slug}`);
    };
 
