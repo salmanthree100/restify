@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
    }, []);
 
-   // Fetch user function using useCallback
+   // 2. Fetch User Profile
    const fetchCurrentUser = useCallback(
       async (jwt: string) => {
          try {
@@ -73,14 +73,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   "Strapi auth check failed with status:",
                   res.status,
                );
-               // ONLY log out if Strapi explicitly tells us the token is bad (401 / 403)
+               // ONLY log out if token is explicitly invalid/expired (401 / 403)
                if (res.status === 401 || res.status === 403) {
                   logout();
                }
             }
          } catch (error) {
             console.error("Failed to fetch current user:", error);
-            // DO NOT call logout() here on network errors or URL misconfigurations!
          } finally {
             setLoading(false);
          }
@@ -88,13 +87,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       [logout],
    );
 
-   // 3. Login Handler
+   // 3. Login Handler (COOKIE FIX APPLIED HERE)
    const login = useCallback((newToken: string, newUser: User) => {
+      const isProduction = process.env.NODE_ENV === "production";
+
       localStorage.setItem("token", newToken);
+
+      // Fixed: Only use secure: true in HTTPS production environments
       Cookies.set("token", newToken, {
          expires: 30,
-         secure: true,
-         sameSite: "strict",
+         secure: isProduction,
+         sameSite: "lax", // Changed from "strict" to allow cross-route persistence
       });
 
       setToken(newToken);
@@ -121,10 +124,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .then((res) => res.json())
             .then((data) => {
                if (data.jwt && data.user) {
-                  // PERSISTENCE FIX: Save token to both Storage & Cookie
                   login(data.jwt, data.user);
 
-                  // Clean URL query params without reloading
                   window.history.replaceState(
                      {},
                      document.title,
@@ -138,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
    }, [login]);
 
-   // 5. Initialize Auth State on Initial Load / Page Refresh
+   // 5. Initialize Auth State
    useEffect(() => {
       let isMounted = true;
 

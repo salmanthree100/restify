@@ -10,11 +10,7 @@
   "options": {
     "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": false
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "checkIn": {
       "type": "date",
@@ -24,15 +20,15 @@
       "type": "date",
       "required": true
     },
-    "status": {
+    "bookingStatus": {
       "type": "enumeration",
+      "required": true,
+      "default": "confirmed",
       "enum": [
         "pending",
         "confirmed",
         "cancelled"
-      ],
-      "default": "confirmed",
-      "required": true
+      ]
     },
     "totalPrice": {
       "type": "decimal"

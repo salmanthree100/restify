@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useParams } from "next/navigation";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import { useSearch } from "@/context/SearchContext";
 import { useAuth } from "@/context/AuthContext";
@@ -14,7 +15,7 @@ import ReviewRequestStep from "@/app/components/pages/book/ReviewRequestStep";
 import { Property, StrapiImage } from "@/app/types";
 
 interface PropertyDetails {
-   id?: number;
+   id?: number | string;
    documentId?: string;
    title: string;
    locationName: string;
@@ -36,6 +37,10 @@ const DEFAULT_PROPERTY: PropertyDetails = {
 };
 
 export default function BookingPage() {
+   const params = useParams();
+   // Get property document ID directly from URL dynamic route parameter [slug]
+   const routePropertyId = (params?.slug as string) || "";
+
    const { dates, guestCounts } = useSearch();
    const { token } = useAuth();
    const [activeStep, setActiveStep] = useState<number>(1);
@@ -60,10 +65,7 @@ export default function BookingPage() {
             const parsed = JSON.parse(data);
             return {
                id: parsed.propertyId || parsed.id,
-               documentId:
-                  parsed.propertyDocumentId ||
-                  parsed.documentId ||
-                  parsed.propertyId, // Fallback check
+               documentId: parsed.propertyDocumentId || parsed.documentId,
                title: parsed.propertyTitle || "",
                locationName: parsed.propertyLocation || "",
                rating: parsed.propertyRating || 5,
@@ -81,14 +83,23 @@ export default function BookingPage() {
    });
 
    const handleBookingSubmit = async () => {
+      // 1. Guard against unauthenticated state before attempting payment
+      if (!token) {
+         setErrorMessage("Your session has expired. Please log in again.");
+         setStatus("error");
+         return;
+      }
+
       if (!paymentDetails?.paymentMethodId) {
          setErrorMessage("Payment method missing. Please complete step 2.");
          setStatus("error");
          return;
       }
 
-      // Identify property document/id
-      const targetPropertyId = property.documentId || property.id;
+      // Resolve Property ID: prefer documentId/id from session, fallback to route param
+      const targetPropertyId =
+         property.documentId || property.id || routePropertyId;
+
       if (!targetPropertyId) {
          setErrorMessage(
             "Property ID is missing. Please reload and select a property.",
@@ -104,25 +115,21 @@ export default function BookingPage() {
          const STRAPI_URL =
             process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
 
-         // Ensure dates are strings formatted YYYY-MM-DD
-         const checkInStr = dates?.from
-            ? new Date(dates.from).toISOString().split("T")[0]
-            : null;
-         const checkOutStr = dates?.to
-            ? new Date(dates.to).toISOString().split("T")[0]
-            : null;
-
          const response = await fetch(`${STRAPI_URL}/api/bookings`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
-               Authorization: token ? `Bearer ${token}` : "",
+               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                data: {
                   property: targetPropertyId,
-                  checkIn: checkInStr,
-                  checkOut: checkOutStr,
+                  checkIn: dates?.from
+                     ? new Date(dates.from).toISOString()
+                     : new Date().toISOString(),
+                  checkOut: dates?.to
+                     ? new Date(dates.to).toISOString()
+                     : new Date(Date.now() + 86400000).toISOString(),
                   guestsCount:
                      (guestCounts?.adults || 1) + (guestCounts?.children || 0),
                   totalPrice: property.totalPrice,
@@ -135,19 +142,25 @@ export default function BookingPage() {
 
          if (!response.ok) {
             const errData = await response.json();
-            throw new Error(errData?.error?.message || "Booking failed");
+
+            // Safely extract message without triggering global error listeners
+            const serverMessage =
+               errData?.error?.message ||
+               "Payment processing failed. Please check your card details.";
+
+            throw new Error(serverMessage);
          }
 
          setIsSubmitting(false);
          setStatus("success");
       } catch (err: unknown) {
          setIsSubmitting(false);
+         setStatus("error");
          setErrorMessage(
             err instanceof Error
                ? err.message
                : "An error occurred during booking.",
          );
-         setStatus("error");
       }
    };
 
@@ -176,8 +189,7 @@ export default function BookingPage() {
 
             {status === "error" && (
                <Alert variant="danger" className="mb-4">
-                  {errorMessage ||
-                     "Your payment was declined. Please check your card details."}
+                  {errorMessage}
                </Alert>
             )}
 

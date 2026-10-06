@@ -20,15 +20,14 @@ export default factories.createCoreController(
             property,
             checkIn,
             checkOut,
+            guests,
             guestsCount,
             totalPrice,
             paymentMethodId,
-            paymentSchedule,
-            hostMessage,
          } = body.data;
 
          try {
-            // 1. Stripe Payment
+            // 1. Process Stripe Payment synchronously
             const paymentIntent = await stripe.paymentIntents.create({
                amount: Math.round(Number(totalPrice) * 100),
                currency: "usd",
@@ -44,25 +43,38 @@ export default factories.createCoreController(
                return ctx.badRequest("Payment processing failed");
             }
 
-            // 2. Persist directly in Strapi v5
+            const formattedCheckIn = checkIn
+               ? new Date(checkIn).toISOString().split("T")[0]
+               : new Date().toISOString().split("T")[0];
+
+            const formattedCheckOut = checkOut
+               ? new Date(checkOut).toISOString().split("T")[0]
+               : new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+            const propertyDocId =
+               typeof property === "object"
+                  ? property?.documentId || property?.id
+                  : property;
+
+            // 2. Persist using bookingStatus instead of reserved status
             const entry = await strapi
                .documents("api::booking.booking")
                .create({
                   data: {
-                     checkIn,
-                     checkOut,
-                     guestsCount: Number(guestsCount || 1),
+                     checkIn: formattedCheckIn,
+                     checkOut: formattedCheckOut,
+                     guestsCount: Number(guestsCount || guests || 1),
                      totalPrice: Number(totalPrice),
-                     status: "confirmed", // Valid lowercase enum value
-                     property: property ? (property as any) : undefined,
+                     bookingStatus: "confirmed", // Custom enum field
+                     property: propertyDocId || undefined,
                      user: user?.documentId || user?.id || undefined,
                   },
-                  status: "published",
+                  status: "published", // Document publish state
                });
 
             return { data: entry };
          } catch (err: unknown) {
-            console.error("Booking creation error:", err);
+            console.error("Booking Creation Error:", err);
             const errorMessage =
                err instanceof Error ? err.message : "Booking creation failed";
             return ctx.badRequest(errorMessage);
