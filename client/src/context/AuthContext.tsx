@@ -19,6 +19,7 @@ export interface UserRole {
 
 export interface User {
    id: number;
+   documentId?: string;
    username: string;
    email: string;
    phoneNumber?: string;
@@ -53,30 +54,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    // 2. Fetch User Profile
    const fetchCurrentUser = useCallback(
       async (jwt: string) => {
+         if (!jwt || jwt === "undefined" || jwt === "null") {
+            setLoading(false);
+            return;
+         }
+
          try {
             const STRAPI_URL =
                process.env.NEXT_PUBLIC_STRAPI_API_URL ||
-               process.env.NEXT_PUBLIC_STRAPI_CLOUD_URL ||
                "http://localhost:1337";
 
             const res = await fetch(`${STRAPI_URL}/api/users/me?populate=*`, {
                headers: {
-                  Authorization: `Bearer ${jwt}`,
+                  Authorization: `Bearer ${jwt.trim()}`,
                },
             });
 
             if (res.ok) {
                const userData: User = await res.json();
                setUser(userData);
-            } else {
+            } else if (res.status === 401 || res.status === 403) {
                console.warn(
-                  "Strapi auth check failed with status:",
-                  res.status,
+                  "Session expired or token invalid. Clearing auth state.",
                );
-               // ONLY log out if token is explicitly invalid/expired (401 / 403)
-               if (res.status === 401 || res.status === 403) {
-                  logout();
-               }
+               logout();
             }
          } catch (error) {
             console.error("Failed to fetch current user:", error);

@@ -56,7 +56,10 @@ export default factories.createCoreController(
                   ? property?.documentId || property?.id
                   : property;
 
-            // 2. Persist using bookingStatus instead of reserved status
+            // Resolve authenticated user ID / documentId
+            const userId = user?.documentId || user?.id || undefined;
+
+            // 2. Persist using exact schema field name (users_permissions_user)
             const entry = await strapi
                .documents("api::booking.booking")
                .create({
@@ -65,11 +68,12 @@ export default factories.createCoreController(
                      checkOut: formattedCheckOut,
                      guestsCount: Number(guestsCount || guests || 1),
                      totalPrice: Number(totalPrice),
-                     bookingStatus: "confirmed", // Custom enum field
+                     bookingStatus: "confirmed",
                      property: propertyDocId || undefined,
-                     user: user?.documentId || user?.id || undefined,
+                     // Matched to the exact schema relation attribute name
+                     users_permissions_user: userId,
                   },
-                  status: "published", // Document publish state
+                  status: "published",
                });
 
             return { data: entry };

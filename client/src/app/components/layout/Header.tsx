@@ -17,6 +17,7 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { CiGlobe } from "react-icons/ci";
 import { usePathname } from "next/navigation";
 import PropertiesHeader from "./PropertiesHeader";
+import DashboardHeader from "./DashboardHeader";
 
 export default function Header() {
    const [showLangModal, setShowLangModal] = useState(false);
@@ -61,6 +62,11 @@ export default function Header() {
 
    if (isPropertiesPage) {
       return <PropertiesHeader />;
+   }
+
+   // 1. Dashboard top header
+   if (pathname.startsWith("/dashboard")) {
+      return <DashboardHeader />;
    }
 
    return (

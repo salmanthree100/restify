@@ -42,7 +42,7 @@ export default function BookingPage() {
    const routePropertyId = (params?.slug as string) || "";
 
    const { dates, guestCounts } = useSearch();
-   const { token } = useAuth();
+   const { user, token } = useAuth();
    const [activeStep, setActiveStep] = useState<number>(1);
 
    const [paymentSchedule, setPaymentSchedule] = useState<"full" | "part">(
@@ -124,6 +124,7 @@ export default function BookingPage() {
             body: JSON.stringify({
                data: {
                   property: targetPropertyId,
+                  users_permissions_user: user?.documentId || user?.id,
                   checkIn: dates?.from
                      ? new Date(dates.from).toISOString()
                      : new Date().toISOString(),

@@ -41,6 +41,12 @@
       "relation": "manyToOne",
       "target": "api::property.property",
       "inversedBy": "bookings"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "bookings"
     }
   }
 }
