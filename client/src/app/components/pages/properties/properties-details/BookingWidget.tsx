@@ -74,7 +74,8 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
    const extraGuests = Math.max(0, currentGuests - baseGuestCapacity);
    const totalExtraGuestFeePerNight = extraGuestFee * extraGuests;
    const effectivePricePerNight = pricePerNight + totalExtraGuestFeePerNight;
-   const totalPrice = effectivePricePerNight * nights;
+   const rawTotalPrice = effectivePricePerNight * nights;
+   const totalPrice = Math.round(rawTotalPrice * 1.1); // Inclusive of 10% VAT for Stripe & Database
 
    const { formatPrice } = useCurrency();
 

@@ -26,6 +26,12 @@ export default function BookingSummaryCard({
    const { formatPrice } = useCurrency();
    const totalGuests = (guests.adults || 1) + (guests.children || 0);
 
+   // Back-calculate base subtotal and tax from the tax-inclusive totalPrice ($1,155)
+   const inclusiveTotal =
+      totalPrice || property.pricePerNight * totalNights * 1.1;
+   const baseSubtotal = Math.round(inclusiveTotal / 1.1);
+   const taxesAndFees = inclusiveTotal - baseSubtotal;
+
    return (
       <Card className="border rounded-4 p-3 shadow-sm bg-white">
          <Card.Body className="p-2">
@@ -76,15 +82,13 @@ export default function BookingSummaryCard({
                <div className="d-flex justify-content-between text-secondary small mb-1">
                   <span>
                      {formatPrice(property.pricePerNight)} x {totalNights}{" "}
-                     nights
+                     {totalNights === 1 ? "night" : "nights"}
                   </span>
-                  <span>
-                     {formatPrice(property.pricePerNight * totalNights)}
-                  </span>
+                  <span>{formatPrice(baseSubtotal)}</span>
                </div>
                <div className="d-flex justify-content-between text-secondary small mb-1">
-                  <span>Taxes & fees</span>
-                  <span>{formatPrice(60)}</span>
+                  <span>Taxes & fees (10%)</span>
+                  <span>{formatPrice(taxesAndFees)}</span>
                </div>
             </div>
 
@@ -93,7 +97,7 @@ export default function BookingSummaryCard({
             {/* Total Price */}
             <div className="d-flex justify-content-between align-items-center fw-bold">
                <span>Total</span>
-               <span className="fs-5">{formatPrice(totalPrice + 60)}</span>
+               <span className="fs-5">{formatPrice(inclusiveTotal)}</span>
             </div>
          </Card.Body>
       </Card>

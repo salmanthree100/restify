@@ -9,6 +9,7 @@ import {
    useCallback,
 } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export interface UserRole {
    id: number;
@@ -41,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    const [user, setUser] = useState<User | null>(null);
    const [token, setToken] = useState<string | null>(null);
    const [loading, setLoading] = useState<boolean>(true);
+   const router = useRouter();
 
    // 1. Logout Handler
    const logout = useCallback(() => {
@@ -49,7 +51,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setToken(null);
       setUser(null);
-   }, []);
+      router.push("/");
+   }, [router]);
 
    // 2. Fetch User Profile
    const fetchCurrentUser = useCallback(
@@ -88,24 +91,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       [logout],
    );
 
-   // 3. Login Handler (COOKIE FIX APPLIED HERE)
-   const login = useCallback((newToken: string, newUser: User) => {
-      const isProduction = process.env.NODE_ENV === "production";
+   // 3. Login Handler
+   const login = useCallback(
+      (newToken: string, newUser: User) => {
+         const isProduction = process.env.NODE_ENV === "production";
 
-      localStorage.setItem("token", newToken);
+         localStorage.setItem("token", newToken);
 
-      // Fixed: Only use secure: true in HTTPS production environments
-      Cookies.set("token", newToken, {
-         expires: 30,
-         secure: isProduction,
-         sameSite: "lax", // Changed from "strict" to allow cross-route persistence
-      });
+         Cookies.set("token", newToken, {
+            expires: 30,
+            secure: isProduction,
+            sameSite: "lax",
+         });
 
-      setToken(newToken);
-      setUser(newUser);
-   }, []);
+         setToken(newToken);
+         setUser(newUser);
+         router.push("/dashboard/trips");
+      },
+      [router],
+   );
 
-   // 4. Handle OAuth Callback
+   // 4. Handle OAuth Callback (UPDATED REDIRECT LOGIC)
    useEffect(() => {
       if (typeof window === "undefined") return;
 
@@ -126,19 +132,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .then((data) => {
                if (data.jwt && data.user) {
                   login(data.jwt, data.user);
-
-                  window.history.replaceState(
-                     {},
-                     document.title,
-                     window.location.pathname,
-                  );
+                  // Explicitly route to dashboard/trips and clear URL parameters
+                  router.push("/dashboard/trips");
                }
             })
             .catch((err) =>
                console.error("Error exchanging OAuth token:", err),
             );
       }
-   }, [login]);
+   }, [login, router]);
 
    // 5. Initialize Auth State
    useEffect(() => {

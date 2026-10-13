@@ -15,6 +15,7 @@ import { defaultCountries, parseCountry } from "react-international-phone";
 import * as Flags from "country-flag-icons/react/3x2";
 import { formatE164 } from "@/lib/utils";
 import { useLocale } from "@/context/LocaleContext";
+import { useRouter } from "next/navigation";
 
 interface AuthModalProps {
    show: boolean;
@@ -45,6 +46,8 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
    const { login } = useAuth();
    // consume useLocale hook
    const { t } = useLocale();
+   // redirect to dashboard trips page
+   const router = useRouter();
 
    const [activeTab, setActiveTab] = useState<"email" | "mobile">("email");
    const [loading, setLoading] = useState<boolean>(false);
@@ -228,6 +231,8 @@ export default function AuthModal({ show, onHide, onSuccess }: AuthModalProps) {
          }
 
          handleAuthSuccess(data.jwt, data.user);
+         // redirect to dashboard trips page upon successful login
+         router.push("/dashboard/trips");
       } catch (err: unknown) {
          const message =
             err instanceof Error ? err.message : "Authentication failed.";

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -96,7 +95,9 @@ export default function TripsHeader() {
          <nav className="nav flex-column gap-1">
             {navItems.map((item) => {
                const IconComponent = item.icon;
-               const isActive = pathname === item.href;
+               const isActive =
+                  pathname === item.href ||
+                  pathname.startsWith(`${item.href}/`);
 
                return (
                   <Link

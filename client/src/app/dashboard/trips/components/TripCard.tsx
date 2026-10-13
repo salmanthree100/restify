@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
 
 export interface Trip {
+   id: number;
    documentId: string;
    checkIn: string;
    checkOut: string;
@@ -81,14 +82,13 @@ export default function TripCard({ trip, onSelect }: TripCardProps) {
                <span className="text-muted small d-block">Total Price</span>
                <strong className="fs-6">${trip.totalPrice}</strong>
             </div>
-            <Button
-               variant="outline-dark"
-               size="sm"
-               className="rounded-pill px-3"
+            <Link
+               href={`/dashboard/trips/${trip.documentId || trip.id}`}
+               className="btn btn-outline-dark btn-sm rounded-pill px-4"
                onClick={() => onSelect(trip)}
             >
                View Details
-            </Button>
+            </Link>
          </div>
       </div>
    );
